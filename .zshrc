@@ -28,20 +28,11 @@ loading_bar() {
     local duration=${1:-0.2}  # Default duration is 0.2 seconds
     local i
 
-    echo -n "Progress: ["
-
-    for i in {1..$width}; do
-        echo -n " "
-    done
-
-    echo -n "]"
-
-    tput cuu1
-    tput cuu1
+    echo -n "Searching: "
 
     while true; do
         sleep "$duration"
-        echo -n "#"
+        echo -n -e "${YELLOW}█${RESET}"
         ((width--))
 
         if [ "$width" -eq 0 ]; then
@@ -49,8 +40,10 @@ loading_bar() {
         fi
     done
 
+    tput cuu1
+
     echo
-    echo "Loading complete"
+    echo "Loading complete       "
 }
 
 # colors
@@ -107,9 +100,11 @@ workspace() {
             open_utils_flag=""
             open_finder_flag=""
             open_project_flag=""
+            open_zshrc_flag=""
             open_helper=""
             open_finder_helper=""
             open_project_helper=""
+            open_zshrc_helper=""
 
             while [ "$#" -gt 0 ]; do
                 case "$1" in
@@ -122,6 +117,11 @@ workspace() {
                         open_utils_flag=true
                         shift
                         open_helper="open"
+                        ;;
+                    -z|--open-zshrc)
+                        open_zshrc_flag=true
+                        shift
+                        open_zshrc_helper="open"
                         ;;
                     -p|--open-project)
                         if [ -z "$2" ]; then
@@ -152,6 +152,11 @@ workspace() {
             if [ -n "$open_finder_helper" ]; then
                 echo -e "${BLUE} Opening finder... ${RESET}"
                 work && open .
+            fi
+
+            if [ -n "$open_zshrc_helper" ]; then
+                echo -e "${MAGENTABG} Opening .zshrc... ${RESET}"
+                (cd ~/workspace/mac-zshrc && code .)
             fi
 
             if [ -n "$open_helper" ]; then
@@ -266,48 +271,82 @@ alias howick="cd ~/howick/hcs"
 iods() {
     case "$1" in
         go)
-            if [ -z "$2" ];  then
-                echo "Usage: iods go <student_name> <module#>"
+            if [ -z "$2" ] || [ -z "$3" ]; then
+                echo "Usage: iods go <student_name> <module_number>"
+                echo
+                echo "iods go <student_name> <module#>      Navigate to students specific lab module & Open VS Code"
+                echo "iods go <student_name> -c             Navigate to students capstone folder & Open VS Code"
                 return 1
             fi
 
-            student_name="$2"
-            module_number="$3"
-            lab_folder="$HOME/iod/students/$student_name/Laboratory Exercises/Module $module_number"
+            attempts_student=0
+            while [ "$attempts_student" -lt 3 ]; do
+                echo -n -e "${BLUEBG} ▶︎ Enter the correct student name: ${RESET}"
+                read student_name
 
-            attempts=0
-            while [ "$attempts" -lt 3 ]; do
-                if [ -d "$student_name" ]; then
-                   attempts_student=0
-                   while [ "$attempts" -lt 3 ]; do
-                    if [ -d "$module_number" ]; then
-                        echo -e "${GREEN} found module. Opening VS Code... ${RESET} "
-                        loading_bar 0.2
+                module_number="$3"
+                lab_folder="$HOME/iod/students/$student_name/Laboratory Exercises/Module $module_number"
+
+                attempts_module=0
+                while [ "$attempts_module" -lt 3 ]; do
+                    if [ -d "$lab_folder" ]; then
+                        loading_bar 0.03
+                        tput cuu1
+                        echo -e "${GREEN} MODULE FOUND. Opening VS Code... ${RESET} "
                         cd "$lab_folder" || { echo -e "${RED}Failed to cd to $lab_folder${RESET}"; return 1; }
                         code .
-                        break
+                        return 0
                     else
-                        echo -e "${RED} student name provided not found ${RESET}"
-                        echo -n -e "${BLUEBG} ▶︎ Enter the correct student name: ${RESET}"
-                        read module_number
-                        ((attempts++))
+                        echo -e "${RED} lab folder not found for student: $student_name, module: $module_number ${RESET}"
+                        if [ "$attempts_module" -eq 2 ]; then
+                            echo -e "${RED} ⚠️ Too many invalid attempts. Performing ls instead. ${RESET}"
+                            ls "$HOME/iod/students/$student_name/Laboratory Exercises/"
+                            return 1
+                        else
+                            echo -n -e "  ▶︎ ${BLUEBG} Enter the correct module number: ${RESET}"
+                            read module_number
+                            lab_folder="$HOME/iod/students/$student_name/Laboratory Exercises/Module $module_number"
+                            ((attempts_module++))
+
+                            if [ "$module_number" = "-c" ]; then
+                                loading_bar 0.02
+                                echo -e "${YELLOWBG} Heading to the Capstone folder ${RESET}"
+
+                                capstone_folder="$HOME/iod/students/$student_name/Capstone"
+                                if [ ! -d "$HOME/iod/students/$student_name/Capstone" ]; then
+                                    echo "Capstone folder not found"
+                                    cd "$HOME/iod/students/$student_name"
+
+                                    echo "Creating Capstone folder"
+                                    loading_bar 0.04
+                                    mkdir Capstone
+                                    code .
+                                    break
+                                else
+                                    cd "$capstone_folder"
+                                    code .
+                                    return 0
+                                fi
+                            fi
+                        fi
                     fi
+                done
 
-                   done
+                echo -e "${RED} ⚠️ Too many invalid attempts for module number. Returning to home directory. ${RESET}"
+                cd ~
 
-                   if [ "$attempts_student" -eq 2 ]; then
-                        echo -e "${RED} ⚠️ Too many invalid attempts. Returning to home directory. ${RESET}"
-                        return 1
-                   fi
+                if [ "$attempts_student" -eq 2 ]; then
+                    echo -e "${RED} ⚠️ Too many invalid attempts for student name. Returning to home directory. ${RESET}"
+                    cd ~
+                    return 1
                 else
-                    echo -e "${RED} student name provided not found ${RESET}"
-                    echo -n -e "${BLUEBG} ▶︎ Enter the correct student name: ${RESET}"
-                    read student_name
-                    ((attempts++))
+                    ((attempts_student++))
                 fi
             done
-            echo -e "${RED} ⚠️ Too many invalid arguments. Returning to home directory. ${RESET}"
+
+            echo -e "${RED} ⚠️ Too many invalid attempts for student name. Returning to home directory. ${RESET}"
             cd ~
+            return 1
             ;;
         labs)
             if [ -z "$2" ];  then
