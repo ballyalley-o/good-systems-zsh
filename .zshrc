@@ -279,13 +279,31 @@ iods() {
                 return 1
             fi
 
-            attempts_student=0
-            while [ "$attempts_student" -lt 3 ]; do
-                echo -n -e "${BLUEBG} ▶︎ Enter the correct student name: ${RESET}"
-                read student_name
-
+                student_name="$2"
                 module_number="$3"
                 lab_folder="$HOME/iod/students/$student_name/Laboratory Exercises/Module $module_number"
+
+                if [ "$module_number" = "-c" ]; then
+                    loading_bar 0.02
+                    echo -e "${YELLOWBG} Heading to the Capstone folder ${RESET}"
+
+                    capstone_folder="$HOME/iod/students/$student_name/Capstone"
+                    if [ ! -d "$HOME/iod/students/$student_name/Capstone" ]; then
+                        echo "Capstone folder not found"
+                        cd "$HOME/iod/students/$student_name"
+
+                        echo "Creating Capstone folder"
+                        loading_bar 0.04
+                        mkdir Capstone
+                        code .
+                        break
+                    else
+                        cd "$capstone_folder"
+                        code .
+                        return 0
+                    fi
+                fi
+
 
                 attempts_module=0
                 while [ "$attempts_module" -lt 3 ]; do
@@ -308,41 +326,9 @@ iods() {
                             lab_folder="$HOME/iod/students/$student_name/Laboratory Exercises/Module $module_number"
                             ((attempts_module++))
 
-                            if [ "$module_number" = "-c" ]; then
-                                loading_bar 0.02
-                                echo -e "${YELLOWBG} Heading to the Capstone folder ${RESET}"
-
-                                capstone_folder="$HOME/iod/students/$student_name/Capstone"
-                                if [ ! -d "$HOME/iod/students/$student_name/Capstone" ]; then
-                                    echo "Capstone folder not found"
-                                    cd "$HOME/iod/students/$student_name"
-
-                                    echo "Creating Capstone folder"
-                                    loading_bar 0.04
-                                    mkdir Capstone
-                                    code .
-                                    break
-                                else
-                                    cd "$capstone_folder"
-                                    code .
-                                    return 0
-                                fi
-                            fi
                         fi
                     fi
                 done
-
-                echo -e "${RED} ⚠️ Too many invalid attempts for module number. Returning to home directory. ${RESET}"
-                cd ~
-
-                if [ "$attempts_student" -eq 2 ]; then
-                    echo -e "${RED} ⚠️ Too many invalid attempts for student name. Returning to home directory. ${RESET}"
-                    cd ~
-                    return 1
-                else
-                    ((attempts_student++))
-                fi
-            done
 
             echo -e "${RED} ⚠️ Too many invalid attempts for student name. Returning to home directory. ${RESET}"
             cd ~
