@@ -279,61 +279,113 @@ iods() {
                 return 1
             fi
 
-                student_name="$2"
-                module_number="$3"
-                lab_folder="$HOME/iod/students/$student_name/Laboratory Exercises/Module $module_number"
+            student_name="$2"
+            module_number="$3"
+            lab_folder="$HOME/iod/students/$student_name/Laboratory Exercises/Module $module_number"
 
-                if [ "$module_number" = "-c" ]; then
-                    loading_bar 0.02
-                    echo -e "${YELLOWBG} Heading to the Capstone folder ${RESET}"
+            if [ "$module_number" = "-c" ]; then
+                loading_bar 0.02
+                echo -e "${YELLOWBG} Heading to the Capstone folder ${RESET}"
 
-                    capstone_folder="$HOME/iod/students/$student_name/Capstone"
-                    if [ ! -d "$HOME/iod/students/$student_name/Capstone" ]; then
-                        echo "Capstone folder not found"
-                        cd "$HOME/iod/students/$student_name"
+                capstone_folder="$HOME/iod/students/$student_name/Capstone"
+                if [ ! -d "$HOME/iod/students/$student_name/Capstone" ]; then
+                    echo "Capstone folder not found"
+                    cd "$HOME/iod/students/$student_name"
 
-                        echo "Creating Capstone folder"
-                        loading_bar 0.04
-                        mkdir Capstone
-                        code .
-                        break
-                    else
-                        cd "$capstone_folder"
+                    echo "Creating Capstone folder"
+                    loading_bar 0.04
+                    mkdir Capstone
+                    code .
+                    return 0
+                else
+                    cd "$capstone_folder"
+                    code .
+                    return 0
+                fi
+            fi
+
+
+            attempts_module=0
+            while [ "$attempts_module" -lt 3 ]; do
+                if [ -d "$lab_folder" ]; then
+                    loading_bar 0.03
+                    tput cuu1
+                    echo -e "${GREEN} MODULE FOUND. ${RESET} "
+                    cd "$lab_folder" || { echo -e "${RED}Failed to cd to $lab_folder${RESET}"; return 1; }
+
+                    echo -e "${BLUEBG} Contents of the module folder: ${RESET}"
+                    ls -al
+                    echo -n -e "${BLUEBG} Enter the subfolder to navigate into (or press Enter to continue): ${RESET}"
+                    read subfolder_input
+
+                    if [ -n "$subfolder_input" ]; then
+                        cd "$subfolder_input" || { echo -e "${RED}Failed to cd to $subfolder_input: ${RESET}"; return 1; }
+
+                        subfolder_input=($(find . -maxdepth 1 -type d | sed -n '1!p'))
+                        num_subfolders=${#subfolder_input[@]}
+
+                        if [ "$num_subfolders" -eq 0 ]; then
+                            echo -e "${YELLOWBG} No subfolders found.${RESET}"
+                            code .
+                            return 0
+                        else
+                            echo -e "${BLUEBG} Subfolders in $subfolder: ${RESET}"
+                            for ((i=0; i<num_subfolders; i++)); do
+                                echo "  $((i+1)): ${subfolder_input[i]}"
+                            done
+
+                            attempts_subfolder=0
+                            while [ "$attempts_subfolder" -lt 3 ]; do
+                                echo -n -e "${BLUEBG} Enter the index of the subfolder to navigate into (or press Enter to continue): ${RESET}"
+                                read subfolder_index
+
+                                if [ -z "$subfolder_index" ]; then
+                                    break
+                                elif [ "$subfolder_index" -ge 1 ] && [ "$subfolder_index" -le "$num_subfolders" ]; then
+                                    selected_subfolder="${subfolders[subfolder_index-1]}"
+                                    cd "$selected_subfolder" || { echo -e "${RED}Failed to cd to $selected_subfolder${RESET}"; return 1; }
+                                    break
+                                else
+                                    echo -e "${RED} Invalid index. Please enter a valid index.${RESET}"
+                                    ((attempts_subfolder++))
+                                fi
+                            done
+
+                            if [ "$attempts_subfolder" -eq 3 ]; then
+                                echo -e "${RED} ⚠️ Too many invalid attempts for subfolder index. Returning to home directory. ${RESET}"
+                                cd ~
+                                return 1
+                            fi
+                        fi
+
                         code .
                         return 0
+                    else
+                        echo -e "${YELLOWBG} No subfolder specified. Opening VS Code in the current folder.${RESET}"
+                        code .
+                        return 0
+                    fi
+                else
+                    echo -e "${RED} lab folder not found for student: $student_name, module: $module_number ${RESET}"
+                    if [ "$attempts_module" -eq 2 ]; then
+                        echo -e "${RED} ⚠️ Too many invalid attempts. Performing ls instead. ${RESET}"
+                        ls "$HOME/iod/students/$student_name/Laboratory Exercises/"
+                        return 1
+                    else
+                        echo -n -e "  ▶︎ ${BLUEBG} Enter the correct module number: ${RESET}"
+                        read module_number
+                        lab_folder="$HOME/iod/students/$student_name/Laboratory Exercises/Module $module_number"
+                        ((attempts_module++))
+
                     fi
                 fi
-
-
-                attempts_module=0
-                while [ "$attempts_module" -lt 3 ]; do
-                    if [ -d "$lab_folder" ]; then
-                        loading_bar 0.03
-                        tput cuu1
-                        echo -e "${GREEN} MODULE FOUND. Opening VS Code... ${RESET} "
-                        cd "$lab_folder" || { echo -e "${RED}Failed to cd to $lab_folder${RESET}"; return 1; }
-                        code .
-                        return 0
-                    else
-                        echo -e "${RED} lab folder not found for student: $student_name, module: $module_number ${RESET}"
-                        if [ "$attempts_module" -eq 2 ]; then
-                            echo -e "${RED} ⚠️ Too many invalid attempts. Performing ls instead. ${RESET}"
-                            ls "$HOME/iod/students/$student_name/Laboratory Exercises/"
-                            return 1
-                        else
-                            echo -n -e "  ▶︎ ${BLUEBG} Enter the correct module number: ${RESET}"
-                            read module_number
-                            lab_folder="$HOME/iod/students/$student_name/Laboratory Exercises/Module $module_number"
-                            ((attempts_module++))
-
-                        fi
-                    fi
-                done
+            done
 
             echo -e "${RED} ⚠️ Too many invalid attempts for student name. Returning to home directory. ${RESET}"
             cd ~
             return 1
             ;;
+
         labs)
             if [ -z "$2" ];  then
                 echo "Usage: iods labs <student_name> <module#> <repo_url> <folder_name>"
