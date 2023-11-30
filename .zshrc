@@ -574,8 +574,6 @@ iod() {
                 return 0
             fi
 
-
-
             attempts_module=0
             while [ "$attempts_module" -lt 3 ]; do
                     if [ -d "$lab_folder" ]; then
@@ -599,8 +597,81 @@ iod() {
 
                             if [ -d "$selected_subfolder" ]; then
                                 cd "$selected_subfolder" || { echo -e "${RED}Failed to cd to $selected_subfolder${RESET}"; return 1; }
-                                code .
-                                return 0
+
+                                echo -n -e "${BLUE}Choose an option:\n 1. Open in VS Code\n 2. Open in PowerPoint\n 3. Open PDF\n 4. Open Finder\n 5. Cancel\n ${RESET} ${YELLOWBG} ▶︎ Enter the option number:${RESET}"
+                                read option
+
+                                case $option in
+                                1)
+                                    code .
+                                    return 0
+                                    ;;
+                                2)
+                                    open ./*.pptx
+                                    return 0
+                                    ;;
+                                3)
+                                    pdfs=(*.pdf)
+                                    num_pdfs=${#pdfs[@]}
+
+                                    if [ "$num_pdfs" -eq 0 ]; then
+                                        echo -e "${YELLOWBG}No PDF files found.${RESET}"
+                                    elif [ "$num_pdfs" -eq 1 ]; then
+                                        pdf_to_open="${pdfs[0]}"
+                                        echo -e "${GREEN}Opening PDF: $pdf_to_open${RESET}"
+
+                                        if command -v open &> /dev/null; then
+                                            open "$pdf_to_open"
+                                        else
+                                            echo -e "${RED}Command 'open' not found. Please manually open the file: $pdf_to_open${RESET}"
+                                        fi
+                                        return 0
+                                    else
+                                        echo -e "${BLUEBG}Choose a PDF to open: ${RESET}"
+
+                                        counter=1
+                                        for pdf in "${pdfs[@]}"; do
+                                            echo " $counter. $pdf"
+                                            ((counter++))
+                                        done
+
+                                        echo -n -e " Enter the PDF number (or 0 to cancel): "
+                                        read -r pdf_option
+
+                                        if [[ "$pdf_option" =~ ^[0-9]+$ ]] && [ "$pdf_option" -gt 0 ] && [ "$pdf_option" -le "$num_pdfs" ]; then
+                                            selected_index=$((pdf_option - 1))
+                                            pdf_to_open="${pdfs[selected_index]}"
+                                            echo -e "${GREEN}Opening PDF: $pdf_to_open${RESET}"
+
+                                            if command -v open &> /dev/null; then
+                                                open "$pdf_to_open"
+                                            else
+                                                echo -e "${RED}Command 'open' not found. Please manually open the file: $pdf_to_open${RESET}"
+                                            fi
+                                            return 0
+
+                                        elif [ "$pdf_option" -eq 20 ]; then
+                                            echo -e "${YELLOWBG}Canceled. Returning to the subfolder.${RESET}"
+                                            return 0
+                                        else
+                                            echo -e "${RED}Invalid option. Returning to the subfolder.${RESET}"
+                                            return 1
+                                        fi
+                                    fi
+                                    ;;
+                                4)
+                                    open .
+                                    return 0
+                                    ;;
+                                5)
+                                    echo -e "${YELLOWBG}Canceled. Returning to the root folder.${RESET}"
+                                    return 1
+                                    ;;
+                                *)
+                                    echo -e "${RED}Invalid option. Please try again.${RESET}"
+                                    ;;
+                                esac
+
                             else
                                 echo -e "${RED}Invalid selection. Please try again.${RESET}"
                             fi
@@ -623,6 +694,7 @@ iod() {
                         fi
                     fi
             done
+
             echo -e "${RED} ⚠️ Too many invalid attempts for student name. Returning to home directory. ${RESET}"
             cd ~
             return 1
