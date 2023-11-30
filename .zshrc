@@ -307,85 +307,55 @@ iods() {
 
             attempts_module=0
             while [ "$attempts_module" -lt 3 ]; do
-                if [ -d "$lab_folder" ]; then
-                    loading_bar 0.03
-                    tput cuu1
-                    echo -e "${GREEN} MODULE FOUND. ${RESET} "
-                    cd "$lab_folder" || { echo -e "${RED}Failed to cd to $lab_folder${RESET}"; return 1; }
+                    if [ -d "$lab_folder" ]; then
+                        loading_bar 0.03
+                        tput cuu1
+                        echo -e "${GREEN} MODULE FOUND. loading options ${RESET} "
+                        cd "$lab_folder" || { echo -e "${RED}Failed to cd to $lab_folder${RESET}"; return 1; }
 
-                    echo -e "${BLUEBG} Contents of the module folder: ${RESET}"
-                    ls -al
-                    echo -n -e "${BLUEBG} Enter the subfolder to navigate into (or press Enter to continue): ${RESET}"
-                    read subfolder_input
+                        echo -e "${BLUEBG} Contents of the module folder: ${RESET}"
+                        PS3="Select a subfolder (or press Enter to continue):"
 
-                    if [ -n "$subfolder_input" ]; then
-                        cd "$subfolder_input" || { echo -e "${RED}Failed to cd to $subfolder_input: ${RESET}"; return 1; }
+                        subfolders=($(find . -maxdepth 1 -type d -exec basename {} \;))
+                        num_subfolders=${#subfolders[@]}
 
-                        subfolder_input=($(find . -maxdepth 1 -type d | sed -n '1!p'))
-                        num_subfolders=${#subfolder_input[@]}
-
-                        if [ "$num_subfolders" -eq 0 ]; then
-                            echo -e "${YELLOWBG} No subfolders found.${RESET}"
-                            code .
-                            return 0
-                        else
-                            echo -e "${BLUEBG} Subfolders in $subfolder: ${RESET}"
-                            for ((i=0; i<num_subfolders; i++)); do
-                                echo "  $((i+1)): ${subfolder_input[i]}"
-                            done
-
-                            attempts_subfolder=0
-                            while [ "$attempts_subfolder" -lt 3 ]; do
-                                echo -n -e "${BLUEBG} Enter the index of the subfolder to navigate into (or press Enter to continue): ${RESET}"
-                                read subfolder_index
-
-                                if [ -z "$subfolder_index" ]; then
-                                    break
-                                elif [ "$subfolder_index" -ge 1 ] && [ "$subfolder_index" -le "$num_subfolders" ]; then
-                                    selected_subfolder="${subfolders[subfolder_index-1]}"
-                                    cd "$selected_subfolder" || { echo -e "${RED}Failed to cd to $selected_subfolder${RESET}"; return 1; }
-                                    break
-                                else
-                                    echo -e "${RED} Invalid index. Please enter a valid index.${RESET}"
-                                    ((attempts_subfolder++))
-                                fi
-                            done
-
-                            if [ "$attempts_subfolder" -eq 3 ]; then
-                                echo -e "${RED} ⚠️ Too many invalid attempts for subfolder index. Returning to home directory. ${RESET}"
-                                cd ~
-                                return 1
+                        select subfolder_input in "${subfolders[@]}"; do
+                            if [ -z "$subfolder_input" ]; then
+                                break
                             fi
+
+                            selected_subfolder="./$subfolder_input"
+
+                            if [ -d "$selected_subfolder" ]; then
+                                cd "$selected_subfolder" || { echo -e "${RED}Failed to cd to $selected_subfolder${RESET}"; return 1; }
+                                code .
+                                return 0
+                            else
+                                echo -e "${RED}Invalid selection. Please try again.${RESET}"
+                            fi
+                        done
+
+                        echo -e "${YELLOWBG} No subfolder specified. Opening VS Code in the current folder ${RESET}"
+                        code .
+                        return 0
+                    else
+                        echo -e "${RED} lab folder not found for student: $student_name, module: $module_number ${RESET}"
+                        if [ "$attempts_module" -eq 2 ]; then
+                            echo -e "${RED} ⚠️ Too many invalid attempts. Performing ls instead. ${RESET}"
+                            ls "$HOME/iod/students/$student_name/Laboratory Exercises/"
+                            return 1
+                        else
+                            echo -n -e "  ▶︎ ${BLUEBG} Enter the correct module number: ${RESET}"
+                            read module_number
+                            lab_folder="$HOME/iod/students/$student_name/Laboratory Exercises/Module $module_number"
+                            ((attempts_module++))
                         fi
-
-                        code .
-                        return 0
-                    else
-                        echo -e "${YELLOWBG} No subfolder specified. Opening VS Code in the current folder.${RESET}"
-                        code .
-                        return 0
                     fi
-                else
-                    echo -e "${RED} lab folder not found for student: $student_name, module: $module_number ${RESET}"
-                    if [ "$attempts_module" -eq 2 ]; then
-                        echo -e "${RED} ⚠️ Too many invalid attempts. Performing ls instead. ${RESET}"
-                        ls "$HOME/iod/students/$student_name/Laboratory Exercises/"
-                        return 1
-                    else
-                        echo -n -e "  ▶︎ ${BLUEBG} Enter the correct module number: ${RESET}"
-                        read module_number
-                        lab_folder="$HOME/iod/students/$student_name/Laboratory Exercises/Module $module_number"
-                        ((attempts_module++))
-
-                    fi
-                fi
             done
-
             echo -e "${RED} ⚠️ Too many invalid attempts for student name. Returning to home directory. ${RESET}"
             cd ~
             return 1
             ;;
-
         labs)
             if [ -z "$2" ];  then
                 echo "Usage: iods labs <student_name> <module#> <repo_url> <folder_name>"
@@ -425,8 +395,6 @@ iods() {
                         ;;
                 esac
             done
-
-
 
             if [ -n "$folder_name" ]; then
                 mkdir "$folder_name"
@@ -515,7 +483,7 @@ check() {
         return
     fi
 }
-
+# main iod function
 iod() {
     case "$1" in
         show)
@@ -583,8 +551,81 @@ iod() {
             ;;
         module)
             if [ -z "$2" ]; then
-                echo "Usage: iod module <module_number> [ -s ]"
+                echo "Usage: iod module <module_number> [ c ]"
+                echo
+                echo "iod module <module_number>    Navigate to modules folder, to specific module number and Open VS Code"
+                echo "iod module -c                 Navigate to modules folder, to Capstone and Open VS Code"
+                return 1
             fi
+
+            module_number="$2"
+            module_folder="$HOME/iod/modules/Module $module_number"
+
+
+             if [ "$module_number" = "-c" ]; then
+                loading_bar 0.01
+                tput cuu1
+                echo -e "${YELLOWBG} Heading to the Capstone folder ${RESET}"
+
+                capstone_folder="$HOME/iod/modules/Capstone"
+                cd "$capstone_folder"
+                code .
+                echo -e "${BLUEBG} Opening VS Code ${RESET}"
+                return 0
+            fi
+
+
+
+            attempts_module=0
+            while [ "$attempts_module" -lt 3 ]; do
+                    if [ -d "$lab_folder" ]; then
+                        loading_bar 0.03
+                        tput cuu1
+                        echo -e "${GREEN} MODULE Material. loading options ${RESET} "
+                        cd "$module_folder" || { echo -e "${RED}Failed to cd to $lab_folder${RESET}"; return 1; }
+
+                        echo -e "${BLUEBG} Contents of the module folder: ${RESET}"
+                        PS3="Select a subfolder (or press Enter to continue):"
+
+                        subfolders=($(find . -maxdepth 1 -type d -exec basename {} \;))
+                        num_subfolders=${#subfolders[@]}
+
+                        select subfolder_input in "${subfolders[@]}"; do
+                            if [ -z "$subfolder_input" ]; then
+                                break
+                            fi
+
+                            selected_subfolder="./$subfolder_input"
+
+                            if [ -d "$selected_subfolder" ]; then
+                                cd "$selected_subfolder" || { echo -e "${RED}Failed to cd to $selected_subfolder${RESET}"; return 1; }
+                                code .
+                                return 0
+                            else
+                                echo -e "${RED}Invalid selection. Please try again.${RESET}"
+                            fi
+                        done
+
+                        echo -e "${YELLOWBG} No subfolder specified. Opening VS Code in the root folder ${RESET}"
+                        code .
+                        return 0
+                    else
+                        echo -e "${RED} module folder not found module: $module_number ${RESET}"
+                        if [ "$attempts_module" -eq 2 ]; then
+                            echo -e "${RED} ⚠️ Too many invalid attempts. Performing ls instead. ${RESET}"
+                            ls "$HOME/iod/modules/Module $module_number"
+                            return 1
+                        else
+                            echo -n -e "  ▶︎ ${BLUEBG} Enter the correct module number: ${RESET}"
+                            read module_number
+                            module_folder="$HOME/iod/module/Module $module_number"
+                            ((attempts_module++))
+                        fi
+                    fi
+            done
+            echo -e "${RED} ⚠️ Too many invalid attempts for student name. Returning to home directory. ${RESET}"
+            cd ~
+            return 1
             ;;
         students)
             case "$2" in
@@ -626,54 +667,16 @@ iod() {
                     if [ -z "$3" ]; then
                         echo "Usage: iod students -go <students_name> <module_number>"
                         echo
-                        echo "iod students -go <student_name> <module_number>           Navigate to students specific lab folder and Open VS Code"
+                        echo "iod students -go <student_name> <module_number>   Navigate to students specific lab folder and Open VS Code"
+                        echo "iod students -go <student_name> -c                Navigate to students capstone folder and Open VS Code"
 
                         return
                     fi
 
-                    attempts=0
-                    while [ "$attempts" -lt 3 ]; do
-                        if [ -d ~/iod/labs/module"$module_number" ]; then
-                            echo "${INVERTED} Opening Module $module_number... ${RESET}"
-                            cd ~/iod/students/"$student"
+                    student_name="$3"
+                    module_number="$4"
 
-                            if [ -n "$(ls -d */ 2>/dev/null)" ]; then
-                                echo "Folders inside. Listing them:"
-                                ls -al
-                                echo -n -e "${BLUEBG} ▶︎ Enter the folder to navigate into:${RESET} "
-                                read folder_name
-
-                                attempts_folder=0
-                                while [ "$attempts_folder" -lt 2 ]; do
-                                    if [ -d "$folder_name" ]; then
-                                        cd "$folder_name"
-                                        break
-                                    else
-                                        echo -e "${RED}Folder \"$folder_name\" doesn't exist${RESET}"
-                                        echo -n -e "${BLUEBG}  ▶︎ Enter the correct folder name:${RESET} "
-                                        read folder_name
-                                        ((attempts_folder++))
-                                    fi
-                                done
-
-                                if [ "$attempts_folder" -eq 2 ]; then
-                                    echo "${RED}⚠️  Too many invalid attempts. Exiting... ↩︎ ${RESET}"
-                                    return
-                                fi
-                            fi
-
-                            code .
-                            return
-                        else
-                            echo "Module \"$module_number\" doesn't exist"
-                            check "$module_number"
-                            ((attempts++))
-                        fi
-                    done
-
-                    echo "${RED}Too many invalid attempts. Returning to home directory.${RESET}"
-                    cd ~
-
+                    iods go "$student_name" "$module_number"
                     ;;
                 -get)
                     if [ -z "$3" ]; then
@@ -714,16 +717,18 @@ iod() {
             esac
             ;;
         *)
-            echo "Usage: iod [ go | show | students [ -list [ . | -l | -e | -u ] | -labs ] ]"
+            echo "Usage: iod [ go | module | show | students [ -list [ . | -l | -e | -u ] | -labs ] ]"
             echo
             echo "iod show                          Navigates to iod folder and open VS Code"
             echo "iod go -c                         Navigates to labs capstone folder in iod and open VS Code"
             echo "iod go <module_number>            Navigates to specific labs module folder in iod and open VS Code"
+            echo "iod module <module_number>        Navigate to modules folder, to specific module number and Open VS Code"
+            echo "iod module -c                     Navigate to modules folder, to Capstone and Open VS Code"
             echo "iod students -list .              Shows the list of students"
             echo "iod students -list -l             Shows the list of students with lastname"
             echo "iod students -list -e             Shows the list of students email"
             echo "iod students -list -u             Shows the list of students Github username"
-	    echo "iod students -get <student_name>  Shows the student details (full name, email and git username)"
+	        echo "iod students -get <student_name>  Shows the student details (full name, email and git username)"
             echo
             echo "iod students -labs <student_name> <module#> <repo_url> [options]..."
             echo "                                ..Clone a repository to students laboratory exercises"
