@@ -58,6 +58,7 @@ BLUE='\033[1;34m'
 CYAN='\033[1;36m'
 DARKGRAY='\e[38;5;240m'
 ORANGE='\e[38;5;208m'
+MAGENTA='\033[35m'
 RESET='\033[0m'
 # bg colors
 BLUEBG='\e[44;30m'
@@ -74,6 +75,7 @@ PS3BLUEBG="%K{blue}"
 PS3ORANGEBG="%K{orange}"
 # PS3 fore
 PS3ORANGE="%F{orange}"
+PS3MAGENTA="%F{magenta}"
 PS3BLUE="%F{blue}"
 PS3RESET="%f"
 
@@ -117,6 +119,7 @@ workspace() {
                 echo "Usage: workspace open [ -o | -u | -p <project_folder> ]"
                 echo "workspace open -o                 Navigates to workspace and Open Finder"
                 echo "workspace open -u                 Navigates to workspace/utils and Open VS Code"
+                echo "workspace open -z                 Navigates to .zshrc and Open VS Code, mainly to version control"
                 echo "workspace open -p <folder_name>   Navigates to specified project folder and Open VS Code"
                 return 1
             fi
@@ -180,8 +183,17 @@ workspace() {
             fi
 
             if [ -n "$open_zshrc_helper" ]; then
-                echo -e "${MAGENTABG} Opening .zshrc... ${RESET}"
-                (cd ~/workspace/mac-zshrc && code .)
+                echo -e "${MAGENTA} Opening .zshrc ${RESET}"
+                loading_bar 0.01 ${MAGENTA}
+                tput cuu1
+                echo
+                cd ~/workspace/mac-zshrc
+                tput cuu1
+                echo -e "❖ ${MAGENTA} Launching VS Code ${RESET}"
+                code .
+                echo -e "❖ ${MAGENTA} Completed ${RESET} 〉${DARKGRAY} .zshrc ${RESET}"
+                echo
+                git log --oneline --abbrev-commit --all --graph --decorate --color -n 5
             fi
 
             if [ -n "$open_helper" ]; then
@@ -200,7 +212,7 @@ workspace() {
             fi
             ;;
 
-        create)
+        c|create)
             if [ -z "$2" ]; then
                 echo "Usage: workspace create folder_name"
                 return 1
@@ -236,7 +248,7 @@ workspace() {
             fi
             ;;
 
-        git)
+        g|git)
             case "$2" in
                 -c)
                     if [ -z "$3" ]; then
@@ -279,7 +291,7 @@ workspace() {
             esac
             ;;
 
-        invoice)
+        i|invoice)
             if [ -z "$1" ]; then
                 echo "Usage: workspace invoice"
                 echo -e "${DARKGRAY}workspace${RESET} invoice           Navigates to workspace/IOD_personal and Open IOD Invoice document"
@@ -302,6 +314,7 @@ workspace() {
             echo
             echo "workspace open -o                         Navigates to workspace and Open Finder"
             echo "workspace open -u                         Navigates to workspace/utils and Open VS Code"
+            echo "workspace open -z                         Navigates to .zshrc and Open VS Code, mainly to version control"
             echo "workspace open -p <project_folder>        Navigates to workspace, Open a specific project and Open VS Code"
             echo "workspace create <folder>                 Creates a folder in the workspace folder"
             echo "workspace git -c <repo_url>               Navigates to workspace/clones folder and clones a repo from git"
@@ -544,7 +557,7 @@ check() {
 # main iod function
 iod() {
     case "$1" in
-        show)
+        .|show)
             cd ~/iod
             loading_bar 0.01 ${BLUE} Navigating
             tput cuu1
@@ -558,10 +571,11 @@ iod() {
             ;;
         go)
             if [ -z "$2" ]; then
-                echo "Usage: iod go <module_number>"
+                echo "Usage: iod go <module_number> [ --clone <git_repo> ]"
                 echo
-                echo "iod go <module_number>        Navigate to labs folder with specific module and Open VS Code"
-                echo "iod go -c                     Navigate to labs folder, specifically to Capstone"
+                echo "iod go <module_number>                            Navigate to labs folder with specific module and Open VS Code"
+                echo "iod go <module_number> --clone <git_repo>         Navigates to specific labs module folder, clone the repo and open VS Code"
+                echo "iod go -c                                         Navigate to labs folder, specifically to Capstone"
                 return
             fi
 
@@ -592,7 +606,6 @@ iod() {
                             if [ -d "$folder_name" ]; then
                                 cd "$folder_name"
                                 clone_folder="$HOME/iod/labs/module$module_number/$folder_name/$(basename $student_repo .git)"
-                                echo "$clone_folder"
                                 break
                             else
                                 echo -e "${RED}Folder \"$folder_name\" doesn't exist${RESET}"
@@ -645,7 +658,7 @@ iod() {
             done
             ;;
 
-        module)
+        m|module)
             if [ -z "$2" ]; then
                 echo "Usage: iod module <module_number> [ c ]"
                 echo
@@ -656,7 +669,6 @@ iod() {
 
             module_number="$2"
             module_folder="$HOME/iod/modules/Module $module_number"
-
 
              if [ "$module_number" = "-c" ]; then
                 loading_bar 0.01
@@ -679,7 +691,8 @@ iod() {
                         cd "$module_folder" || { echo -e "${RED}Failed to cd to $lab_folder${RESET}"; return 1; }
 
                         echo -e "${BLUEBG} Contents of the module folder: ${RESET}"
-                        PS3="Select a subfolder (or press Enter to continue):"
+                        echo
+                        PS3="${PS3BLUE}Select a subfolder (or press Enter to continue):${PS3RESET}"
 
                         subfolders=($(find . -maxdepth 1 -type d -exec basename {} \;))
                         num_subfolders=${#subfolders[@]}
@@ -725,7 +738,6 @@ iod() {
                                     else
                                         echo -e "${BLUEBG}Choose a PDF to open: ${RESET}"
 
-                                        # FIXME: the list doesn't match what is selected, index is not showing up
                                         counter=1
                                         for pdf in "${pdfs[@]}"; do
                                             echo " $counter. $pdf"
@@ -735,10 +747,11 @@ iod() {
                                         echo -n -e " Enter the PDF number (or 0 to cancel): "
                                         read -r pdf_option
 
-                                        if [[ "$pdf_option" =~ ^[0-9]+$ ]] && [ "$pdf_option" -gt 0 ] && [ "$pdf_option" -le "$num_pdfs" ]; then
-                                            selected_index=$((pdf_option - 1))
+                                        if [[ "$pdf_option" =~ ^[0-9]+$ ]] && [ "$pdf_option" -gt 0 ]; then
+                                            selected_index=$((pdf_option))
                                             pdf_to_open="${pdfs[selected_index]}"
                                             echo -e "${GREEN}Opening PDF: $pdf_to_open${RESET}"
+                                            open "$pdf_to_open"
 
                                             if command -v open &> /dev/null; then
                                                 open "$pdf_to_open"
@@ -747,7 +760,7 @@ iod() {
                                             fi
                                             return 0
 
-                                        elif [ "$pdf_option" -eq 20 ]; then
+                                        elif [ "$pdf_option" -eq 0 ]; then
                                             echo -e "${YELLOWBG}Canceled. Returning to the subfolder.${RESET}"
                                             return 0
                                         else
@@ -796,7 +809,7 @@ iod() {
             cd ~
             return 1
             ;;
-        students)
+        s|students)
             case "$2" in
                 -list)
                     case "$3" in
@@ -888,11 +901,12 @@ iod() {
             esac
             ;;
         *)
-            echo "Usage: iod [ go | module | show | students [ -list [ . | -l | -e | -u ] | -labs ] ]"
+            echo "Usage: iod [ go [ -c | [ --clone ] | module | show | students [ -list [ . | -l | -e | -u ] | -labs ] ]"
             echo
             echo "iod show                                          Navigates to iod folder and open VS Code"
             echo "iod go -c                                         Navigates to labs capstone folder in iod and open VS Code"
             echo "iod go <module_number>                            Navigates to specific labs module folder in iod and open VS Code"
+            echo "iod go <module_number> --clone <git_repo>         Navigates to specific labs module folder, clone the repo and open VS Code"
             echo "iod module <module_number>                        Navigate to modules folder, to specific module number and Open VS Code"
             echo "iod module -c                                     Navigate to modules folder, to Capstone and Open VS Code"
             echo "iod students -list .                              Shows the list of students"
