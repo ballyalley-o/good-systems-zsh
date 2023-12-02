@@ -1,4 +1,12 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 source /usr/local/opt/spaceship/spaceship.zsh
+source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 export PATH="/usr/local/opt/mongodb-community@5.0/bin:$PATH"
 export JAVA_HOME="/usr/bin/java"
 
@@ -756,7 +764,7 @@ iod() {
 
         m|module)
             if [ -z "$2" ]; then
-                echo "Usage: iod module <module_number> [ c ]"
+                echo "Usage: iod module <module_number> [ -c ]"
                 echo
                 echo "iod module <module_number>    Navigate to modules folder, to specific module number and Open VS Code"
                 echo "iod module -c                 Navigate to modules folder, to Capstone and Open VS Code"
@@ -780,7 +788,7 @@ iod() {
 
             attempts_module=0
             while [ "$attempts_module" -lt 3 ]; do
-                    if [ -d "$lab_folder" ]; then
+                    if [ -d "$module_folder" ]; then
                         loading_bar 0.03
                         tput cuu1
                         echo -e "${GREEN} MODULE Material. loading options ${RESET} "
@@ -824,12 +832,7 @@ iod() {
                                     elif [ "$num_pdfs" -eq 1 ]; then
                                         pdf_to_open="${pdfs[0]}"
                                         echo -e "${GREEN}Opening PDF: $pdf_to_open${RESET}"
-
-                                        if command -v open &> /dev/null; then
-                                            open "$pdf_to_open"
-                                        else
-                                            echo -e "${RED}Command 'open' not found. Please manually open the file: $pdf_to_open${RESET}"
-                                        fi
+                                        open *.pdf
                                         return 0
                                     else
                                         echo -e "${BLUEBG}Choose a PDF to open: ${RESET}"
@@ -848,13 +851,6 @@ iod() {
                                             pdf_to_open="${pdfs[selected_index]}"
                                             echo -e "${GREEN}Opening PDF: $pdf_to_open${RESET}"
                                             open "$pdf_to_open"
-
-                                            if command -v open &> /dev/null; then
-                                                open "$pdf_to_open"
-                                            else
-                                                echo -e "${RED}Command 'open' not found. Please manually open the file: $pdf_to_open${RESET}"
-                                            fi
-                                            return 0
 
                                         elif [ "$pdf_option" -eq 0 ]; then
                                             echo -e "${YELLOWBG}Canceled. Returning to the subfolder.${RESET}"
@@ -905,6 +901,7 @@ iod() {
             cd ~
             return 1
             ;;
+
         s|students)
             case "$2" in
                 -list)
@@ -1065,3 +1062,7 @@ hltd() {
 }
 
 
+source ~/powerlevel10k/powerlevel10k.zsh-theme
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
