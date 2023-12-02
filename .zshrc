@@ -47,7 +47,7 @@ loading_bar() {
     tput cuu1
 
     echo
-    echo "Loading complete       "
+    echo "Loading complete                      "
 }
 
 # colors
@@ -104,17 +104,132 @@ frmt() {
 
 function mkdir
 {
-  command mkdir $1 && cd $1
+    command mkdir $1 && cd $1
 }
+
+function gitn
+{
+    git log --oneline --abbrev-commit --all --graph --decorate --color -n 5
+}
+
 alias work="cd ~/workspace"
 alias docs="cd ~/documents/Docs && open . && cd"
 alias howick="cd ~/howick/hcs"
+
+# logging
+log() {
+    case "$1" in
+        .)
+            local project_name="$2"
+            local dir=${3:-root}
+            local func1=${4:-""}
+            local loadbar_title=${5:-Navigating:}
+            local color=${6:-"$BLUE"}
+            local colorbg=${7:-"$BLUEBG"}
+            local work_name=${8:-"$project_name"}
+
+
+            if [ "$project_name" = Workspace ]; then
+                func1=""
+                color="$MAGENTA"
+                colorbg="$MAGENTABG"
+                work_name=Workspace
+                loadbar_title=Navigating:
+            fi
+
+            if [ "$project_name" = .zshrc ]; then
+                dir=.zshrc
+                color="$MAGENTA"
+                colorbg="$MAGENTABG"
+                work_name="Workspace shell config"
+            fi
+
+            echo -e "${color} Opening... ${RESET}"
+            tput cuu1
+            loading_bar 0.01 ${color} "$loadbar_title"
+            tput cuu1
+            echo -e "${color}🔍 googling.. ${RESET}"
+            tput cuu1
+            echo -e "${color} 🔍googling... ${RESET}"
+            tput cuu1
+            echo -e "${color} Launching "$project_name" ${RESET}"
+            tput cuu1
+            echo -e "❖ ${colorbg} ${work_name} ${RESET} 〉${DARKGRAY} ${dir} ${RESET}"
+            echo
+            ;;
+        bg|bgood)
+            if [ -z "$2" ]; then
+                echo "log bgood <function>"
+                echo
+                echo "Usage:"
+                echo "  Logging formatted for bgood workspace"
+                return 1
+            fi
+
+            local work_function="$2"
+
+            loading_bar 0.01 ${BLUE} Navigating
+            tput cuu1
+            echo -e "${MAGENTA} Opening Workspace ${RESET}"
+            tput cuu1
+            "$work_function"
+            echo
+            tput cuu1
+            echo -e "❖ ${BLUEBG} Workspace ${RESET} 〉${DARKGRAY} root ${RESET}"
+            echo
+            ;;
+        hp|hltd)
+            if [ -z "$2" ]; then
+                echo "log hltd <repo>"
+                echo
+                echo "Usage:"
+                echo "  Logging formatted for howick portal "
+                return 1
+            fi
+
+            local dir="$2"
+            local repo_dir="$3"
+
+            # color
+            local color=""
+            local olorbg=""
+
+            if [ "$dir" = Client ]; then
+                color="$BLUE"
+                colorbg="$BLUEBG"
+                repo_dir=hp_dev-new
+            fi
+
+            if [ "$dir" = Server ]; then
+                color="$ORANGE"
+                colorbg="$ORANGEBG"
+                repo_dir=hp_server
+            fi
+
+            loading_bar 0.01 ${color} Navigating:
+            howick
+            tput cuu1
+            echo -e "${color} Opening ${dir} in VS Code ${RESET}"
+            cd $HOME/howick/hcs/"$repo_dir"
+            tput cuu1
+            echo -e "${color} Launching Howick Portal ${RESET}"
+            code .
+            tput cuu1
+            echo -e "❖ ${colorbg} Welcome to Howick Portal ${RESET} 〉 ${DARKGRAY} ${dir} ${RESET}"
+            echo
+            ;;
+        *)
+            echo "Invalid log type"
+            return 1
+        ;;
+    esac
+}
 
 # personal workspace stuff
 
 workspace() {
     case "$1" in
-        open)
+        .|open)
             if [ -z "$2" ]; then
                 echo "Usage: workspace open [ -o | -u | -p <project_folder> ]"
                 echo "workspace open -o                 Navigates to workspace and Open Finder"
@@ -156,14 +271,14 @@ workspace() {
                             echo -e "${GREEN}Please provide a project folder with -p option${RESET}"
                             return 1
                         fi
-
                         open_project_flag=true
-                        work
                         folder_name="$2"
+                        log . Workspace "$folder_name"
+                        work
 
                         if [ ! -d "$folder_name" ]; then
                             echo -e "${RED}${folder_name} folder doesn't exist${RESET}"
-                            return 1
+                            return 0
                         fi
 
                         shift 2
@@ -183,22 +298,16 @@ workspace() {
             fi
 
             if [ -n "$open_zshrc_helper" ]; then
-                echo -e "${MAGENTA} Opening .zshrc ${RESET}"
-                loading_bar 0.01 ${MAGENTA}
-                tput cuu1
-                echo
-                cd ~/workspace/mac-zshrc
-                tput cuu1
-                echo -e "❖ ${MAGENTA} Launching VS Code ${RESET}"
+                cd $HOME/workspace/mac-zshrc
+                log . .zshrc
                 code .
-                echo -e "❖ ${MAGENTA} Completed ${RESET} 〉${DARKGRAY} .zshrc ${RESET}"
-                echo
-                git log --oneline --abbrev-commit --all --graph --decorate --color -n 5
+                gitn
             fi
 
             if [ -n "$open_helper" ]; then
-                echo -e "${BLUE} Opening Utils Folder... ${RESET}"
-                (cd ~/workspace/utils && code .)
+                cd $HOME/workspace/utils
+                log . "Workspace Utils" "sandbox&snippets"
+                code .
             fi
 
             if [ -n "$open_project_helper" ]; then
@@ -207,8 +316,8 @@ workspace() {
                     return 1
                 fi
 
-                echo -e "${BLUE} Opening ${folder_name}... ${RESET}"
-                (cd "$folder_name" && code .)
+                cd "$folder_name"
+                gitn
             fi
             ;;
 
@@ -299,14 +408,7 @@ workspace() {
             fi
 
             cd "$HOME/workspace/IOD personal/2023-10-10-se-pt-nz-rem"
-            loading_bar 0.01 ${BLUE} Navigating
-            tput cuu1
-            echo -e "${BLUE} Opening IOD Invoice ${RESET}"
-            tput cuu1
-            echo
-            tput cuu1
-            echo -e "❖ ${BLUEBG} Completed ${RESET} 〉${DARKGRAY} template-iod-invoice.pages ${RESET}"
-            echo
+            log . Navigating: "IOD Invoice" "$BLUE" template-iod-invoice.pages
             open template-iod-invoice.pages
             ;;
         *)
@@ -368,7 +470,6 @@ iods() {
                 fi
             fi
 
-
             attempts_module=0
             while [ "$attempts_module" -lt 3 ]; do
                     if [ -d "$lab_folder" ]; then
@@ -428,7 +529,7 @@ iods() {
             cd ~
             return 1
             ;;
-        labs)
+        l|labs)
             if [ -z "$2" ];  then
                 echo "Usage: iods labs <student_name> <module#> <repo_url> <folder_name>"
                 echo "Options:"
@@ -469,20 +570,15 @@ iods() {
 
             if [ -n "$folder_name" ]; then
                 mkdir "$folder_name"
-                repo_folder="$folder_name"
+                repo_folder="$lab_folder/$folder_name/$repo_folder"
+                # git clone "$student_repo" || { echo -e "${RED}Failed to clone repository${RESET}"; return 1 ; }
             fi
 
             git clone "$student_repo" || { echo -e "${RED}Failed to clone repository${RESET}"; return 1 ; }
-            # cd "$repo_folder"
-            # code .
-
-            if [ ! -d "$repo_folder" ]; then
-                echo -e "${RED} repo_folder doesn't exist ${RESET}"
-                return 1
-            fi
 
             if [ -n "$open_helper" ]; then
-                code "$repo_folder"
+                # cd "$repo_folder"
+                code .
             fi
             ;;
         *)
@@ -845,7 +941,7 @@ iod() {
                             ;;
                     esac
                     ;;
-                -go)
+                -go|go)
                     if [ -z "$3" ]; then
                         echo "Usage: iod students -go <students_name> <module_number>"
                         echo
@@ -868,7 +964,7 @@ iod() {
 
                     get_student "$3"
                     ;;
-                -labs)
+                -labs|labs|l)
                     if [ -z "$4" ]; then
                         echo "Usage: iod students -labs <student_name> <module#> <repo_url> [options]"
                         return 1
@@ -933,20 +1029,12 @@ hltd() {
 	    howick && cd ~/howick/hcs/hp_dev-new
 	    ;;
         client)
-            loading_bar 0.01 ${BLUE} NAVIGATING:
-            tput cuu1
-            echo -e "${BLUE} Opening Client in VS Code ${RESET}"
-            howick && cd ~/howick/hcs/hp_dev-new   && code .
-            tput cuu1
-            echo -e "${BLUE} Launching Howick Portal ${RESET}"
-            tput cuu1
-            echo -e "❖ ${BLUEBG} Welcome to Howick Portal ${RESET} 〉 ${DARKGRAY} CLIENT ${RESET}"
-            echo
-            git log --oneline --abbrev-commit --all --graph --decorate --color -n 5
+            log hltd Client
+            gitn
             echo
             echo -n -e "${BLUE} Start the Client? (yes/no):${RESET}\c"
             read start_client
-            if [ "$start_client" = "yes" ]; then
+            if [ "$start_client" = "yes" ] || [ "$start_client" = "y" ]; then
                 echo -e "${BLUE} Starting the client...${RESET}"
                 npm start
             else
@@ -954,20 +1042,12 @@ hltd() {
             fi
             ;;
         server)
-            loading_bar 0.01 ${ORANGE} NAVIGATING:y
-            tput cuu1
-            echo -e "${ORANGE} Opening Server in VS Code ${RESET}"
-            howick && cd ~/howick/hcs/hp_server  && code .
-            tput cuu1
-            echo -e "${ORANGE} Launching Howick Portal ${RESET}"
-            tput cuu1
-            echo -e "❖ ${ORANGEBG} Welcome to Howick Portal ${RESET}  〉 ${DARKGRAY} SERVER ${RESET}"
+            log hp Server
+            gitn
             echo
-            git log --oneline --abbrev-commit --all --graph --decorate --color -n 5
-            echo
-            echo -n -e"${ORANGE} Start the Server? (yes/no):${RESET}\c"
+            echo -n -e "${ORANGE} Start the Server? (yes/no):${RESET}\c"
             read start_server
-            if [ "$start_server" = "yes" ]; then
+            if [ "$start_server" = "yes" ] || [ "$start_server" = "y" ]; then
                 echo -e "${ORANGE} Starting the server...${RESET}"
                 npm start
             else
