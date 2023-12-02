@@ -23,16 +23,20 @@ export PATH="$HOME/.cargo/bin:$PATH"
 export PATH="/usr/local/opt/python/libexec/bin:$PATH"
 
 # loading bar
+# Usage: loading_bar <duration: 0.2> <color: YELLOW> <message: Searching:>
 loading_bar() {
     local width=20
-    local duration=${1:-0.2}  # Default duration is 0.2 seconds
+    local duration=${1:-0.2}
     local i
 
-    echo -n "Searching: "
+    color=${2:-"$YELLOW"}
+    msg=${3:-Searching:}
+
+    echo -n -e "$msg"
 
     while true; do
         sleep "$duration"
-        echo -n -e "${YELLOW}█${RESET}"
+        echo -n -e "${color}█${RESET}"
         ((width--))
 
         if [ "$width" -eq 0 ]; then
@@ -52,6 +56,8 @@ GREEN='\033[1;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[1;34m'
 CYAN='\033[1;36m'
+DARKGRAY='\e[38;5;240m'
+ORANGE='\e[38;5;208m'
 RESET='\033[0m'
 # bg colors
 BLUEBG='\e[44;30m'
@@ -59,8 +65,17 @@ REDBG='\e[41m'
 YELLOWBG='\e[43;30m'
 MAGENTABG='\e[1;45m'
 CYANBG='\e[46m'
+ORANGEBG='\e[48;5;208;30m'
 WHITEBG='\e[47m'
 INVERTED='\e[7m'
+BLUEWHITE="\e[47;34m"
+# PS3 bg
+PS3BLUEBG="%K{blue}"
+PS3ORANGEBG="%K{orange}"
+# PS3 fore
+PS3ORANGE="%F{orange}"
+PS3BLUE="%F{blue}"
+PS3RESET="%f"
 
 frmt() {
     settings_file="$HOME/Library/Application Support/Code/User/settings.json"
@@ -68,11 +83,20 @@ frmt() {
     if grep -q '"editor.formatOnSave": true' "$settings_file" || grep -q '"editor.formatOnPaste": true' "$settings_file"; then
         sed -i '' 's/"editor.formatOnSave": true/"editor.formatOnSave": false/' "$settings_file"
         sed -i '' 's/"editor.formatOnPaste": true/"editor.formatOnPaste": false/' "$settings_file"
+        loading_bar 0.01 ${RED} DISABLING:
+        tput cuu1
         echo -e "${RED}❌ Auto-formatting DISABLED in VS Code.${RESET}"
+        echo -e "${DARKGRAY} ⎿ Auto-formatting on Save DISABLED.${RESET}"
+        echo -e "${DARKGRAY} ⎿ Auto-formatting on Paste DISABLED.${RESET}"
     else
         sed -i '' 's/"editor.formatOnSave": false/"editor.formatOnSave": true/' "$settings_file"
         sed -i '' 's/"editor.formatOnPaste": false/"editor.formatOnPaste": true/' "$settings_file"
+        loading_bar 0.01 ${GREEN} ENABLING:
+        tput cuu1
         echo -e "${GREEN}✅ Auto-formatting ENABLED in VS Code.${RESET}"
+        echo -e "${DARKGRAY} ⎿ Auto-formatting on Save ENABLED.${RESET}"
+        echo -e "${DARKGRAY} ⎿ Auto-formatting on Paste ENABLED.${RESET}"
+        echo -e "${BLUE} Start the server? (yes/no): ${RESET}"
     fi
 }
 
@@ -80,8 +104,9 @@ function mkdir
 {
   command mkdir $1 && cd $1
 }
-
 alias work="cd ~/workspace"
+alias docs="cd ~/documents/Docs && open . && cd"
+alias howick="cd ~/howick/hcs"
 
 # personal workspace stuff
 
@@ -253,6 +278,25 @@ workspace() {
                     ;;
             esac
             ;;
+
+        invoice)
+            if [ -z "$1" ]; then
+                echo "Usage: workspace invoice"
+                echo -e "${DARKGRAY}workspace${RESET} invoice           Navigates to workspace/IOD_personal and Open IOD Invoice document"
+                return 1
+            fi
+
+            cd "$HOME/workspace/IOD personal/2023-10-10-se-pt-nz-rem"
+            loading_bar 0.01 ${BLUE} Navigating
+            tput cuu1
+            echo -e "${BLUE} Opening IOD Invoice ${RESET}"
+            tput cuu1
+            echo
+            tput cuu1
+            echo -e "❖ ${BLUEBG} Completed ${RESET} 〉${DARKGRAY} template-iod-invoice.pages ${RESET}"
+            echo
+            open template-iod-invoice.pages
+            ;;
         *)
             echo "Usage: workspace [open [ -o | -u ] | create <folder_name> | git [ -c <repo_url> | <repo_url> <folder_name>]]"
             echo
@@ -262,11 +306,12 @@ workspace() {
             echo "workspace create <folder>                 Creates a folder in the workspace folder"
             echo "workspace git -c <repo_url>               Navigates to workspace/clones folder and clones a repo from git"
             echo "workspace git <repo_url> <folder_name>    Creates a folder in workspace folder and clones a repo"
+            echo "workspace invoice                         Navigates to workspace/IOD_personal and Open IOD Invoice document"
             ;;
     esac
 }
 
-alias howick="cd ~/howick/hcs"
+
 
 iods() {
     case "$1" in
@@ -295,6 +340,12 @@ iods() {
                     echo "Creating Capstone folder"
                     loading_bar 0.04
                     mkdir Capstone
+                    tput cuu1
+                    echo -e "${BLUE} Capstone folder Created ${RESET}"
+                    echo -e "${BLUE} Launching VS Code ${RESET}"
+                    loading_bar 0.01 ${BLUE} Launching
+                    tput cuu1
+                    echo -e "❖ ${ORANGEBG} IOD main ${RESET}  〉 ${DARKGRAY} ${student_name} Capstone ${RESET}"
                     code .
                     return 0
                 else
@@ -314,7 +365,7 @@ iods() {
                         cd "$lab_folder" || { echo -e "${RED}Failed to cd to $lab_folder${RESET}"; return 1; }
 
                         echo -e "${BLUEBG} Contents of the module folder: ${RESET}"
-                        PS3="Select a subfolder (or press Enter to continue):"
+                        PS3="▶︎ ${PS3BLUE}Select a subfolder (or press Enter to continue):${PS3RESET}"
 
                         subfolders=($(find . -maxdepth 1 -type d -exec basename {} \;))
                         num_subfolders=${#subfolders[@]}
@@ -328,6 +379,10 @@ iods() {
 
                             if [ -d "$selected_subfolder" ]; then
                                 cd "$selected_subfolder" || { echo -e "${RED}Failed to cd to $selected_subfolder${RESET}"; return 1; }
+                                echo -e "${BLUE} Launching VS Code ${RESET}"
+                                loading_bar 0.01 ${BLUE} Launching
+                                tput cuu1
+                                echo -e "❖ ${ORANGEBG} IOD main ${RESET}  〉 ${DARKGRAY} ${student_name} ${selected_subfolder} ${RESET}"
                                 code .
                                 return 0
                             else
@@ -336,6 +391,10 @@ iods() {
                         done
 
                         echo -e "${YELLOWBG} No subfolder specified. Opening VS Code in the current folder ${RESET}"
+                        echo -e "${BLUE} Launching VS Code ${RESET}"
+                        loading_bar 0.01 ${BLUE} Launching
+                        tput cuu1
+                        echo -e "❖ ${ORANGEBG} IOD main ${RESET}  〉 ${DARKGRAY} ${student_name} ${selected_subfolder} ${RESET}"
                         code .
                         return 0
                     else
@@ -389,7 +448,6 @@ iods() {
                         shift
                         open_helper="open"
                         ;;
-
                     *)
                         shift
                         ;;
@@ -487,7 +545,16 @@ check() {
 iod() {
     case "$1" in
         show)
-            cd ~/iod && code .
+            cd ~/iod
+            loading_bar 0.01 ${BLUE} Navigating
+            tput cuu1
+            echo -e "${BLUE} Opening IOD main in VS Code ${RESET}"
+            tput cuu1
+            echo
+            tput cuu1
+            echo -e "❖ ${BLUEBG} Completed ${RESET} 〉${DARKGRAY} IOD ${RESET}"
+            echo
+            code .
             ;;
         go)
             if [ -z "$2" ]; then
@@ -499,6 +566,8 @@ iod() {
             fi
 
             module_number="$2"
+            student_repo="$4"
+            clone_folder=""
 
             if [ "$module_number" = '-c' ]; then
                 echo "${YELLOWBG}Opening Capstone...${RESET}"
@@ -522,6 +591,8 @@ iod() {
                         while [ "$attempts_folder" -lt 2 ]; do
                             if [ -d "$folder_name" ]; then
                                 cd "$folder_name"
+                                clone_folder="$HOME/iod/labs/module$module_number/$folder_name/$(basename $student_repo .git)"
+                                echo "$clone_folder"
                                 break
                             else
                                 echo -e "${RED}Folder \"$folder_name\" doesn't exist${RESET}"
@@ -537,7 +608,34 @@ iod() {
                         fi
                     fi
 
+                    clone_flag=""
+                    clone_helper=""
+
+                    while [ "$#" -gt 0 ]; do
+                        case "$1" in
+                            --clone|--clone-repo)
+                                clone_flag=true
+                                shift
+                                clone_helper="clone"
+                                ;;
+                            *)
+                                shift
+                                ;;
+                        esac
+                    done
+
+                    if [ -n "$clone_helper" ]; then
+                        git clone "$student_repo"  || { echo -e "${RED}Failed to clone repository${RESET}"; return 1 ; }
+                        code "$clone_folder"
+                        if [ ! -d "$clone_folder" ]; then
+                            echo -e "${RED} clone_folder doesn't exist ${RESET}"
+                            return 1
+                        fi
+                        break
+                    fi
+
                     code .
+
                     return
                 else
                     echo "Module \"$module_number\" doesn't exist"
@@ -545,10 +643,8 @@ iod() {
                     ((attempts++))
                 fi
             done
-
-            echo "${RED}Too many invalid attempts. Returning to home directory.${RESET}"
-            cd ~
             ;;
+
         module)
             if [ -z "$2" ]; then
                 echo "Usage: iod module <module_number> [ c ]"
@@ -629,6 +725,7 @@ iod() {
                                     else
                                         echo -e "${BLUEBG}Choose a PDF to open: ${RESET}"
 
+                                        # FIXME: the list doesn't match what is selected, index is not showing up
                                         counter=1
                                         for pdf in "${pdfs[@]}"; do
                                             echo " $counter. $pdf"
@@ -774,38 +871,42 @@ iod() {
                 *)
                     echo "Usage: iod students [ -list | -get | -labs ]"
                     echo
-                    echo "iod students -list .              Shows the list of students"
-                    echo "iod students -list -l             Shows the list of students with lastname"
-                    echo "iod students -list -e             Shows the list of students email"
-                    echo "iod students -list -u             Shows the list of students Github username"
-                    echo "iod students -list -all           Shows the list of students with all details"
-                    echo "iod students -get <student_name>  Shows the student details (full name, email and git username)"
+                    echo "iod students -list .                              Shows the list of students"
+                    echo "iod students -list -l                             Shows the list of students with lastname"
+                    echo "iod students -list -e                             Shows the list of students email"
+                    echo "iod students -list -u                             Shows the list of students Github username"
+                    echo "iod students -list -all                           Shows the list of students with all details"
+                    echo "iod students -go <student_name> <module_number>   Navigate to students specific lab folder and Open VS Code"
+                    echo "iod students -go <student_name> -c                Navigate to students capstone folder and Open VS Code"
+                    echo "iod students -get <student_name>                  Shows the student details (full name, email and git username)"
                     echo
                     echo "iod students -labs <student_name> <module#> <repo_url> [options]..."
-                    echo "                                ..Clone a repository to students laboratory exercises"
+                    echo "                                                  ..Clone a repository to students laboratory exercises"
                     echo "Options:"
-                    echo " -f --folder <folder_name>        Specify the folder name (optional)"
+                    echo " -f --folder <folder_name>                        Specify the folder name (optional)"
                     ;;
             esac
             ;;
         *)
             echo "Usage: iod [ go | module | show | students [ -list [ . | -l | -e | -u ] | -labs ] ]"
             echo
-            echo "iod show                          Navigates to iod folder and open VS Code"
-            echo "iod go -c                         Navigates to labs capstone folder in iod and open VS Code"
-            echo "iod go <module_number>            Navigates to specific labs module folder in iod and open VS Code"
-            echo "iod module <module_number>        Navigate to modules folder, to specific module number and Open VS Code"
-            echo "iod module -c                     Navigate to modules folder, to Capstone and Open VS Code"
-            echo "iod students -list .              Shows the list of students"
-            echo "iod students -list -l             Shows the list of students with lastname"
-            echo "iod students -list -e             Shows the list of students email"
-            echo "iod students -list -u             Shows the list of students Github username"
-	        echo "iod students -get <student_name>  Shows the student details (full name, email and git username)"
+            echo "iod show                                          Navigates to iod folder and open VS Code"
+            echo "iod go -c                                         Navigates to labs capstone folder in iod and open VS Code"
+            echo "iod go <module_number>                            Navigates to specific labs module folder in iod and open VS Code"
+            echo "iod module <module_number>                        Navigate to modules folder, to specific module number and Open VS Code"
+            echo "iod module -c                                     Navigate to modules folder, to Capstone and Open VS Code"
+            echo "iod students -list .                              Shows the list of students"
+            echo "iod students -list -l                             Shows the list of students with lastname"
+            echo "iod students -list -e                             Shows the list of students email"
+            echo "iod students -list -u                             Shows the list of students Github username"
+            echo "iod students -go <student_name> <module_number>   Navigate to students specific lab folder and Open VS Code"
+            echo "iod students -go <student_name> -c                Navigate to students capstone folder and Open VS Code"
+	        echo "iod students -get <student_name>                  Shows the student details (full name, email and git username)"
             echo
             echo "iod students -labs <student_name> <module#> <repo_url> [options]..."
-            echo "                                ..Clone a repository to students laboratory exercises"
+            echo "                                                  ..Clone a repository to students laboratory exercises"
             echo "Options:"
-            echo " -f --folder <folder_name>        Specify the folder name (optional)"
+            echo " -f --folder <folder_name>                        Specify the folder name (optional)"
             ;;
     esac
 }
@@ -817,20 +918,56 @@ hltd() {
 	    this)
 	    howick && cd ~/howick/hcs/hp_dev-new
 	    ;;
-        dev)
+        client)
+            loading_bar 0.01 ${BLUE} NAVIGATING:
+            tput cuu1
+            echo -e "${BLUE} Opening Client in VS Code ${RESET}"
             howick && cd ~/howick/hcs/hp_dev-new   && code .
+            tput cuu1
+            echo -e "${BLUE} Launching Howick Portal ${RESET}"
+            tput cuu1
+            echo -e "❖ ${BLUEBG} Welcome to Howick Portal ${RESET} 〉 ${DARKGRAY} CLIENT ${RESET}"
+            echo
+            git log --oneline --abbrev-commit --all --graph --decorate --color -n 5
+            echo
+            echo -n -e "${BLUE} Start the Client? (yes/no):${RESET}\c"
+            read start_client
+            if [ "$start_client" = "yes" ]; then
+                echo -e "${BLUE} Starting the client...${RESET}"
+                npm start
+            else
+                echo -e "${YELLOWBG} Client not started.${RESET}"
+            fi
             ;;
         server)
+            loading_bar 0.01 ${ORANGE} NAVIGATING:y
+            tput cuu1
+            echo -e "${ORANGE} Opening Server in VS Code ${RESET}"
             howick && cd ~/howick/hcs/hp_server  && code .
+            tput cuu1
+            echo -e "${ORANGE} Launching Howick Portal ${RESET}"
+            tput cuu1
+            echo -e "❖ ${ORANGEBG} Welcome to Howick Portal ${RESET}  〉 ${DARKGRAY} SERVER ${RESET}"
+            echo
+            git log --oneline --abbrev-commit --all --graph --decorate --color -n 5
+            echo
+            echo -n -e"${ORANGE} Start the Server? (yes/no):${RESET}\c"
+            read start_server
+            if [ "$start_server" = "yes" ]; then
+                echo -e "${ORANGE} Starting the server...${RESET}"
+                npm start
+            else
+                echo -e "${YELLOWBG} Server not started.${RESET}"
+            fi
             ;;
         *)
-         echo "Usage: hltd [this | dev | server]"
+        echo "Usage: hltd [ this | client | server ]"
 	    echo
-	    echo "hltd this     Navigate to the howick portal UI local"
-	    echo "hltd dev      Navigate to the howick portal UI local and open VS Code"
-	    echo "htld server   Navigate to the howick portal SERVER local and open VS Code"
-            ;;
+	    echo "${DARKGRAY}hltd${RESET} this     Navigate to the howick portal UI local"
+	    echo "${DARKGRAY}hltd${RESET} client   Navigate to the howick portal UI local and open VS Code (optional: start client)"
+	    echo "${DARKGRAY}hltd${RESET} server   Navigate to the howick portal SERVER local and open VS Code (optional: start server)"
+        ;;
     esac
 }
 
-alias docs="cd ~/documents/Docs && open . && cd"
+
