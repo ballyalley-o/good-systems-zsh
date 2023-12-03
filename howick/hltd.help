@@ -1,0 +1,10 @@
+
+hltd Command
+
+Usage:
+
+    hltd [ this | client | server ]
+
+hltd this       Navigate to the howick portal UI local
+hltd client     Navigate to the howick portal UI local and open VS Code (optional: start client)
+hltd server     Navigate to the howick portal SERVER local and open VS Code (optional: start server)

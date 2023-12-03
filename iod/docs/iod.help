@@ -1,0 +1,136 @@
+
+iod Command
+
+Usage:
+
+    iod [ go [ -c | [ --clone ] | module | show | students [ -list [ . | -l | -e | -u ] | -labs ] ]
+
+iod show                                          Navigates to iod folder and open VS Code
+iod go -c                                         Navigates to labs capstone folder in iod and open VS Code
+iod go <module_number>                            Navigates to specific labs module folder in iod and open VS Code
+iod go <module_number> --clone <git_repo>         Navigates to specific labs module folder, clone the repo and open VS Code
+iod module <module_number>                        Navigate to modules folder, to specific module number and Open VS Code
+iod module -c                                     Navigate to modules folder, to Capstone and Open VS Code
+iod students -list .                              Shows the list of students
+iod students -list --l                            Shows the list of students with lastname
+iod students -list --e                            Shows the list of students email
+iod students -list --u                            Shows the list of students Github username
+iod students -list --all                          Shows the list of students with all details
+iod students -go <student_name> <module_number>   Navigate to students specific lab folder and Open VS Code
+iod students -go <student_name> -c                Navigate to students capstone folder and Open VS Code
+iod students -get <student_name>                  Shows the student details (full name, email and git username)
+iod students -labs <student_name> <module#> <repo_url> [options]...
+                                                  ..Clone a repository to students laboratory exercises
+    Options:
+        -f --folder <folder_name>                 Specify the folder name (optional)
+
+# ---------------------------------------------------------------------------------------------------------------------------
+
+iod students Command
+
+Usage:
+
+    iod students [ -list | -go | -get | -labs ]
+
+iod students -list .                              Shows the list of students
+iod students -list --l                            Shows the list of students with lastname
+iod students -list --e                            Shows the list of students email
+iod students -list --u                            Shows the list of students Github username
+iod students -list --all                          Shows the list of students with all details
+iod students -go <student_name> <module_number>   Navigate to students specific lab folder and Open VS Code
+iod students -go <student_name> -c                Navigate to students capstone folder and Open VS Code
+iod students -get <student_name>                  Shows the student details (full name, email and git username)
+iod students -labs <student_name> <module#> <repo_url> [options]...
+                                                  ..Clone a repository to students laboratory exercises
+    Options:
+        -f --folder <folder_name>                 Specify the folder name (optional)
+
+# ---------------------------------------------------------------------------------------------------------------------------
+
+iod module Command
+
+Usage:
+
+    iod module <module_number> [ -c ]
+
+iod module <module_number>    Navigate to modules folder, to specific module number and Open VS Code
+iod module -c                 Navigate to modules folder, to Capstone and Open VS Code
+
+# ---------------------------------------------------------------------------------------------------------------------------
+
+iod students -list Command
+
+Usage:
+
+    iod students -list [ . | -l  | -e  | -u | -all ]
+
+iod students -list .              Shows the list of students
+iod students -list --l            Shows the list of students with lastname
+iod students -list --e            Shows the list of students email
+iod students -list --u            Shows the list of students Github username
+iod students -list --all          Shows the list of students with all details
+
+# ---------------------------------------------------------------------------------------------------------------------------
+
+iod students -go Command
+
+Usage:
+
+    iod students -go <students_name> <module_number>
+
+iod students -go <student_name> <module_number>   Navigate to students specific lab folder and Open VS Code"
+iod students -go <student_name> -c                Navigate to students capstone folder and Open VS Code"
+
+# ---------------------------------------------------------------------------------------------------------------------------
+
+iod go Command
+
+Usage:
+
+    iod go <module_number> [ --clone <git_repo> ]
+
+iod go <module_number>                            Navigate to labs folder with specific module and Open VS Code
+iod go <module_number> --clone <git_repo>         Navigates to specific labs module folder, clone the repo and open VS Code
+iod go -c                                         Navigate to labs folder, specifically to Capstone
+
+# iods ======================================================================================================================
+
+iods Command ( utility for iod )
+
+Usage:
+
+    iods [ go <student_name> <module_number> | labs  <student_name> <module#> <repo_url> [options] ]
+
+iods go <student_name> <module#>                            Navigate to students specific lab module & Open VS Code
+iods go <student_name> -c                                   Navigate to students capstone folder & Open VS Code
+iods labs <student_name> <module#> <repo_url> [options]     Navigate to specific students folder clone a repository
+
+    Options:
+        -f, --folder <folder_name>   Specify folder name (optional)
+        -o, --open-cloned            Navigate to cloned repository and Open VS Code (optional)
+
+# ---------------------------------------------------------------------------------------------------------------------------
+
+iods labs Command
+
+Usage:
+
+    iods labs <student_name> <module#> <repo_url> [options]
+
+    Options:
+        -f, --folder <folder_name>   Specify folder name (optional)
+        -o, --open-cloned            Navigate to cloned repository and Open VS Code (optional)
+
+# ---------------------------------------------------------------------------------------------------------------------------
+
+iods go Command
+
+Usage:
+
+    iods go <student_name> <module_number>
+
+iods go <student_name> <module#>      Navigate to students specific lab module & Open VS Code
+iods go <student_name> -c             Navigate to students capstone folder & Open VS Code
+
+
+# ---------------------------------------------------------------------------------------------------------------------------
