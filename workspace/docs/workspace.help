@@ -1,0 +1,30 @@
+
+workspace Command
+
+Usage:
+
+    workspace [open [ -o | -u ] | create <folder_name> | git [ -c <repo_url> | <repo_url> <folder_name>]]
+
+workspace open -o                         Navigates to workspace and Open Finder
+workspace open -u                         Navigates to workspace/utils and Open VS Code
+workspace open -z                         Navigates to .and Open VS Code, mainly to version control
+workspace open -p <project_folder>        Navigates to workspace, Open a specific project and Open VS Code
+workspace create <folder_name>            Creates a folder inorkspace folder
+workspace git -c <repo_url>               Navigates to workspace/clones folder and clones a repo from git
+workspace git <repo_url> <folder_name>    Creates a folder in workspace folder and clones a repo
+workspace invoice                         Navigates to workspace/IOD_personal and Open IOD Invoice document
+
+# ---------------------------------------------------------------------------------------------------------------------------
+
+ workspace open Command
+
+ Usage:
+
+    workspace open [ -o | -u | -p <project_folder> ]
+
+ workspace open -o                 Navigates to workspace and Open Finder
+ workspace open -u                 Navigates to workspace/utils and Open VS Code
+ workspace open -z                 Navigates to .and Open VS Code, mainly to version control
+ workspace open -p <folder_name>   Navigates to specified project folder and Open VS Code
+
+ # ---------------------------------------------------------------------------------------------------------------------------
