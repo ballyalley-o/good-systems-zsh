@@ -19,7 +19,6 @@ frmt() {
         echo -e "${GREEN}✅ Auto-formatting ENABLED in VS Code.${RESET}"
         echo -e "${DARKGRAY} ⎿ Auto-formatting on Save ENABLED.${RESET}"
         echo -e "${DARKGRAY} ⎿ Auto-formatting on Paste ENABLED.${RESET}"
-        echo -e "${BLUE} Start the server? (yes/no): ${RESET}"
     fi
 }
 
