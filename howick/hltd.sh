@@ -1,6 +1,10 @@
 source ~/mac-zshrc/utilities/aliases.sh
 source ~/mac-zshrc/utilities/colors.sh
 source ~/mac-zshrc/utilities/functions.sh
+source ~/mac-zshrc/utilities/read-doc.sh -h
+
+# command documentation
+htld_doc=$HOME/mac-zshrc/howick/hltd.help
 
 hltd() {
     case "$1" in
@@ -34,11 +38,7 @@ hltd() {
             fi
             ;;
         *)
-        echo "Usage: hltd [ this | client | server ]"
-	    echo
-	    echo "${DARKGRAY}hltd${RESET} this     Navigate to the howick portal UI local"
-	    echo "${DARKGRAY}hltd${RESET} client   Navigate to the howick portal UI local and open VS Code (optional: start client)"
-	    echo "${DARKGRAY}hltd${RESET} server   Navigate to the howick portal SERVER local and open VS Code (optional: start server)"
+        read_doc $htld_doc
         ;;
     esac
 }
