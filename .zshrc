@@ -59,70 +59,13 @@ loading_bar() {
 }
 
 # colors
-RED='\033[1;31m'
-GREEN='\033[1;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[1;34m'
-CYAN='\033[1;36m'
-DARKGRAY='\e[38;5;240m'
-ORANGE='\e[38;5;208m'
-MAGENTA='\033[35m'
-RESET='\033[0m'
-# bg colors
-BLUEBG='\e[44;30m'
-REDBG='\e[41m'
-YELLOWBG='\e[43;30m'
-MAGENTABG='\e[1;45m'
-CYANBG='\e[46m'
-ORANGEBG='\e[48;5;208;30m'
-WHITEBG='\e[47m'
-INVERTED='\e[7m'
-BLUEWHITE="\e[47;34m"
-# PS3 bg
-PS3BLUEBG="%K{blue}"
-PS3ORANGEBG="%K{orange}"
-# PS3 fore
-PS3ORANGE="%F{orange}"
-PS3MAGENTA="%F{magenta}"
-PS3BLUE="%F{blue}"
-PS3RESET="%f"
-
-frmt() {
-    settings_file="$HOME/Library/Application Support/Code/User/settings.json"
-
-    if grep -q '"editor.formatOnSave": true' "$settings_file" || grep -q '"editor.formatOnPaste": true' "$settings_file"; then
-        sed -i '' 's/"editor.formatOnSave": true/"editor.formatOnSave": false/' "$settings_file"
-        sed -i '' 's/"editor.formatOnPaste": true/"editor.formatOnPaste": false/' "$settings_file"
-        loading_bar 0.01 ${RED} DISABLING:
-        tput cuu1
-        echo -e "${RED}❌ Auto-formatting DISABLED in VS Code.${RESET}"
-        echo -e "${DARKGRAY} ⎿ Auto-formatting on Save DISABLED.${RESET}"
-        echo -e "${DARKGRAY} ⎿ Auto-formatting on Paste DISABLED.${RESET}"
-    else
-        sed -i '' 's/"editor.formatOnSave": false/"editor.formatOnSave": true/' "$settings_file"
-        sed -i '' 's/"editor.formatOnPaste": false/"editor.formatOnPaste": true/' "$settings_file"
-        loading_bar 0.01 ${GREEN} ENABLING:
-        tput cuu1
-        echo -e "${GREEN}✅ Auto-formatting ENABLED in VS Code.${RESET}"
-        echo -e "${DARKGRAY} ⎿ Auto-formatting on Save ENABLED.${RESET}"
-        echo -e "${DARKGRAY} ⎿ Auto-formatting on Paste ENABLED.${RESET}"
-        echo -e "${BLUE} Start the server? (yes/no): ${RESET}"
-    fi
-}
-
-function mkdir
-{
-    command mkdir $1 && cd $1
-}
-
-function gitn
-{
-    git log --oneline --abbrev-commit --all --graph --decorate --color -n 5
-}
-
-alias work="cd ~/workspace"
-alias docs="cd ~/documents/Docs && open . && cd"
-alias howick="cd ~/howick/hcs"
+source ~/mac-zshrc/utilities/colors.sh
+# sub-functions
+source ~/mac-zshrc/utilities/functions.sh
+# aliases
+source ~/mac-zshrc/utilities/aliases.sh
+# formatting
+source ~/mac-zshrc/utilities/formatting.sh
 
 # logging
 log() {
@@ -306,7 +249,7 @@ workspace() {
             fi
 
             if [ -n "$open_zshrc_helper" ]; then
-                cd $HOME/workspace/mac-zshrc
+                cd $HOME/mac-zshrc
                 log . .zshrc
                 code .
                 gitn
@@ -830,9 +773,10 @@ iod() {
                                     if [ "$num_pdfs" -eq 0 ]; then
                                         echo -e "${YELLOWBG}No PDF files found.${RESET}"
                                     elif [ "$num_pdfs" -eq 1 ]; then
-                                        pdf_to_open="${pdfs[0]}"
-                                        echo -e "${GREEN}Opening PDF: $pdf_to_open${RESET}"
-                                        open *.pdf
+                                        pdf_to_open="${pdfs[1]}"
+                                        echo -e "${GREEN}Opening PDF: $pdf_to_open ${RESET}"
+                                        echo -e "${NEONGREEN}COMPLETED 〉${RESET}"
+                                        open "$pdf_to_open"
                                         return 0
                                     else
                                         echo -e "${BLUEBG}Choose a PDF to open: ${RESET}"
@@ -846,10 +790,11 @@ iod() {
                                         echo -n -e " Enter the PDF number (or 0 to cancel): "
                                         read -r pdf_option
 
-                                        if [[ "$pdf_option" =~ ^[0-9]+$ ]] && [ "$pdf_option" -gt 0 ]; then
+                                        if [[ "$pdf_option" =~ ^[0-9]+$ ]] && [ "$pdf_option" -gt 0 ] && [ "$pdf_option" -le "$num_pdfs" ]; then
                                             selected_index=$((pdf_option))
                                             pdf_to_open="${pdfs[selected_index]}"
-                                            echo -e "${GREEN}Opening PDF: $pdf_to_open${RESET}"
+                                            echo -e "${GREEN}Opening PDF: "$pdf_to_open" ${RESET}"
+                                            echo -e "${CYAN} COMPLETED  ${RESET}"
                                             open "$pdf_to_open"
 
                                         elif [ "$pdf_option" -eq 0 ]; then
@@ -909,16 +854,16 @@ iod() {
                         .)
                             printf "%s\n" "${students[@]}"
                             ;;
-                        -l)
+                        --l)
                             printf "%s\n" "${students_lastname[@]}"
                             ;;
-                        -e)
+                        --e)
                             printf "%s\n" "${students_email[@]}"
                             ;;
-                        -u)
+                        --u)
                             printf "%s\n" "${students_usernames[@]}"
                             ;;
-                        -all)
+                        --all|--a)
                             echo -e "${YELLOW}Name\tLast Name\t\tEmail\t\t\tUsername${RESET}"
                             # echo -e "----\t---------\t\t-----\t\t\t--------"
 
@@ -931,10 +876,10 @@ iod() {
                         *)
                             echo "Usage: iod students -list [ . | -l  | -e  | -u | -all ]"
                             echo "iod students -list .              Shows the list of students"
-                            echo "iod students -list -l             Shows the list of students with lastname"
-                            echo "iod students -list -e             Shows the list of students email"
-                            echo "iod students -list -u             Shows the list of students Github username"
-                            echo "iod students -list -all           Shows the list of students with all details"
+                            echo "iod students -list --l            Shows the list of students with lastname"
+                            echo "iod students -list --e            Shows the list of students email"
+                            echo "iod students -list --u            Shows the list of students Github username"
+                            echo "iod students -list --all          Shows the list of students with all details"
                             ;;
                     esac
                     ;;
@@ -978,10 +923,10 @@ iod() {
                     echo "Usage: iod students [ -list | -get | -labs ]"
                     echo
                     echo "iod students -list .                              Shows the list of students"
-                    echo "iod students -list -l                             Shows the list of students with lastname"
-                    echo "iod students -list -e                             Shows the list of students email"
-                    echo "iod students -list -u                             Shows the list of students Github username"
-                    echo "iod students -list -all                           Shows the list of students with all details"
+                    echo "iod students -list --l                            Shows the list of students with lastname"
+                    echo "iod students -list --e                            Shows the list of students email"
+                    echo "iod students -list --u                            Shows the list of students Github username"
+                    echo "iod students -list --all                          Shows the list of students with all details"
                     echo "iod students -go <student_name> <module_number>   Navigate to students specific lab folder and Open VS Code"
                     echo "iod students -go <student_name> -c                Navigate to students capstone folder and Open VS Code"
                     echo "iod students -get <student_name>                  Shows the student details (full name, email and git username)"
@@ -1003,9 +948,9 @@ iod() {
             echo "iod module <module_number>                        Navigate to modules folder, to specific module number and Open VS Code"
             echo "iod module -c                                     Navigate to modules folder, to Capstone and Open VS Code"
             echo "iod students -list .                              Shows the list of students"
-            echo "iod students -list -l                             Shows the list of students with lastname"
-            echo "iod students -list -e                             Shows the list of students email"
-            echo "iod students -list -u                             Shows the list of students Github username"
+            echo "iod students -list --l                            Shows the list of students with lastname"
+            echo "iod students -list --e                            Shows the list of students email"
+            echo "iod students -list --u                            Shows the list of students Github username"
             echo "iod students -go <student_name> <module_number>   Navigate to students specific lab folder and Open VS Code"
             echo "iod students -go <student_name> -c                Navigate to students capstone folder and Open VS Code"
 	        echo "iod students -get <student_name>                  Shows the student details (full name, email and git username)"
