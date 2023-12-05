@@ -188,6 +188,8 @@ iod() {
                                             echo -e "${CYAN} COMPLETED  ${RESET}"
                                             open "$pdf_to_open"
 
+                                            return 0
+
                                         elif [ "$pdf_option" -eq 0 ]; then
                                             echo -e "${YELLOWBG}Canceled. Returning to the subfolder.${RESET}"
                                             return 0
