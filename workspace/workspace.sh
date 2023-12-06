@@ -1,7 +1,7 @@
-source ~/mac-zshrc/utilities/logging.sh
-source ~/mac-zshrc/utilities/colors.sh
-source ~/mac-zshrc/utilities/functions.sh
-source ~/mac-zshrc/utilities/read-doc.sh -h
+source ~/win-bashrc/mac-zshrc/utilities/logging.sh
+source ~/win-bashrc/mac-zshrc/utilities/colors.sh
+source ~/win-bashrc/mac-zshrc/utilities/functions.sh
+source ~/win-bashrc/mac-zshrc/utilities/read-doc.sh -h
 
 workspace_doc=$HOME/mac-zshrc/workspace/docs/workspace.help
 

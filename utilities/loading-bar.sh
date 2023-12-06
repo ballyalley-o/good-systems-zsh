@@ -1,4 +1,4 @@
-source ~/mac-zshrc/utilities/colors.sh
+source ~/win-bashrc/mac-zshrc/utilities/colors.sh
 
 # loading bar
 # Usage: loading_bar <duration: 0.2> <color: YELLOW> <message: Searching:>

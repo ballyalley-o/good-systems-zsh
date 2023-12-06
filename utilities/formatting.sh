@@ -1,7 +1,8 @@
-source ~/mac-zshrc/utilities/colors.sh
+source ~/win-bashrc/mac-zshrc/utilities/colors.sh
 
 frmt() {
-    settings_file="$HOME/Library/Application Support/Code/User/settings.json"
+    # TODO: map windows vscode  extension settings json
+    # settings_file="$HOME/Library/Application Support/Code/User/settings.json"
 
     if grep -q '"editor.formatOnSave": true' "$settings_file" || grep -q '"editor.formatOnPaste": true' "$settings_file"; then
         sed -i '' 's/"editor.formatOnSave": true/"editor.formatOnSave": false/' "$settings_file"

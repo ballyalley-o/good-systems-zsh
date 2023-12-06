@@ -1,2 +1,2 @@
 # custom commands
-source ~/mac-zshrc/main.sh
+source ~/win-bashrc/mac-zshrc/main.sh

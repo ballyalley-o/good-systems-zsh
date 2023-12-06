@@ -1,4 +1,4 @@
-source ~/mac-zshrc/utilities/colors.sh
+source ~/win-bashrc/mac-zshrc/utilities/colors.sh
 
 # logging
 log() {

@@ -1,19 +1,19 @@
 # colors
-source ~/mac-zshrc/utilities/colors.sh
+source ~/win-bashrc/mac-zshrc/utilities/colors.sh
 # loading bar
-source ~/mac-zshrc/utilities/loading-bar.sh
+source ~/win-bashrc/mac-zshrc/utilities/loading-bar.sh
 # sub-functions
-source ~/mac-zshrc/utilities/functions.sh
+source ~/win-bashrc/mac-zshrc/utilities/functions.sh
 # aliases
-source ~/mac-zshrc/utilities/aliases.sh
+source ~/win-bashrc/mac-zshrc/utilities/aliases.sh
 # formatting
-source ~/mac-zshrc/utilities/formatting.sh
+source ~/win-bashrc/mac-zshrc/utilities/formatting.sh
 # logging
-source ~/mac-zshrc/utilities/logging.sh
+source ~/win-bashrc/mac-zshrc/utilities/logging.sh
 # workspace
-source ~/mac-zshrc/workspace/workspace.sh
+# source ~/win-bashrc/mac-zshrc/workspace/workspace.sh
 # howick
-source ~/mac-zshrc/howick/hltd.sh
-# iod
-source ~/mac-zshrc/iod/helpers.sh
-source ~/mac-zshrc/iod/iod.sh
+source ~/win-bashrc/mac-zshrc/howick/hltd.sh
+# # iod
+# source ~/win-bashrc/mac-zshrc/iod/helpers.sh
+# source ~/win-bashrc/mac-zshrc/iod/iod.sh
