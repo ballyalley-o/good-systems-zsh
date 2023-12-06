@@ -49,7 +49,7 @@ hltd() {
             ;;
             -i|-ini)
                 cd ~/desktop/sync-machine/howick-sync-machine/data && start Howick.ini
-                echo -e "${YELLOW} Mock ini Opened ${RESET}"
+                echo -e "${MAGENTABG} 🤡 Mock ini Opened ${RESET}"
             ;;
             *)
                 echo "Usage: hltd sync [ -c | -code | -s | -start | -i | -ini ]"
