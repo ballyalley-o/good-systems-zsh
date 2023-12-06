@@ -1,3 +1,4 @@
 *.env
 students.sh
 .backup.zshrc
+.backup.bashrc
