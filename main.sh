@@ -14,6 +14,7 @@ source ~/win-bashrc/mac-zshrc/utilities/logging.sh
 source ~/win-bashrc/mac-zshrc/workspace/workspace.sh
 # howick
 source ~/win-bashrc/mac-zshrc/howick/hltd.sh
+source ~/win-bashrc/mac-zshrc/howick/gen5.sh
 # # iod
 # source ~/win-bashrc/mac-zshrc/iod/helpers.sh
 # source ~/win-bashrc/mac-zshrc/iod/iod.sh
