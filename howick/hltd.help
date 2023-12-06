@@ -3,8 +3,17 @@ hltd Command
 
 Usage:
 
-    hltd [ this | client | server ]
+    hltd [ this | client | server | gen5 [ main | logis ] | sync [ -c | -s | -i ]  ]
 
-hltd this       Navigate to the howick portal UI local
-hltd client     Navigate to the howick portal UI local and open VS Code (optional: start client)
-hltd server     Navigate to the howick portal SERVER local and open VS Code (optional: start server)
+hltd this               Navigate to the howick portal UI local
+hltd client             Navigate to the howick portal UI local and open VS Code (optional: start client)
+hltd server             Navigate to the howick portal SERVER local and open VS Code (optional: start server)
+hltd gen5               Navigate to the howick portal SERVER local and open VS Code (optional: start server)
+hltd gen5 main          Navigate to the howick gen5 main local and open VS Code
+hltd gen5 ini           Navigate to the HowickHLCv3 & Open the machine configuration (ini)
+hltd gen5 logis         Navigate to the howick gen5 logis local and open VS Code
+hltd gen5 repo          Navigate to the howick local repo folder and show the folder
+hltd gen5 soft          Navigate to the hlcv3 soft releases folder
+hltd sync -c            Navigate to the howick sync machine repository and Open VS Code
+hltd sync -s            Navigate to the howick sync machine repository and Show the folder
+hltd sync -i            Navigate to the howick sync machine repository and Show the mock ini
