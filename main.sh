@@ -11,7 +11,7 @@ source ~/win-bashrc/mac-zshrc/utilities/formatting.sh
 # logging
 source ~/win-bashrc/mac-zshrc/utilities/logging.sh
 # workspace
-# source ~/win-bashrc/mac-zshrc/workspace/workspace.sh
+source ~/win-bashrc/mac-zshrc/workspace/workspace.sh
 # howick
 source ~/win-bashrc/mac-zshrc/howick/hltd.sh
 # # iod
