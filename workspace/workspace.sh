@@ -72,8 +72,8 @@ workspace() {
             fi
 
             if [ -n "$open_zshrc_helper" ]; then
-                cd $HOME/mac-zshrc
-                log . .zshrc
+                cd $HOME/win-bashrc/mac-zshrc
+                log . .bashrc
                 code .
                 gitn
             fi
