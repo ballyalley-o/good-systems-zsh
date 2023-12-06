@@ -1,10 +1,11 @@
 source ~/win-bashrc/mac-zshrc/utilities/aliases.sh
 source ~/win-bashrc/mac-zshrc/utilities/colors.sh
 source ~/win-bashrc/mac-zshrc/utilities/functions.sh
+source ~/win-bashrc/mac-zshrc/howick/gen5.sh
 source ~/win-bashrc/mac-zshrc/utilities/read-doc.sh -h
 
 # command documentation
-htld_doc=$HOME/mac-zshrc/howick/hltd.help
+htld_doc=$HOME/win-bashrc/mac-zshrc/howick/hltd.help
 
 hltd() {
     case "$1" in
@@ -46,8 +47,12 @@ hltd() {
                 cd ~/desktop/sync-machine/howick-sync-machine && start .
                 gitn
             ;;
+            -i|-ini)
+                cd ~/desktop/sync-machine/howick-sync-machine/data && start Howick.ini
+                echo -e "${YELLOW} Mock ini Opened ${RESET}"
+            ;;
             *)
-                echo "Usage: hltd sync [-c | -code | -s | -start]"
+                echo "Usage: hltd sync [ -c | -code | -s | -start | -i | -ini ]"
                 return 1
                 ;;
             esac
@@ -55,7 +60,10 @@ hltd() {
         gen5)
             case "$2" in
                 main)
-                gen5 main
+                gen5 main .
+                ;;
+                ini)
+                gen5 main -i
                 ;;
                 logis)
                 gen5 logis
@@ -78,7 +86,7 @@ hltd() {
                     cd "~/Documents/Support/Software/HowickHLCv3-SoftRelease"
                     ;;
                 *)
-                    echo "Usage: hltd gen5 [main | logis | repos] [-1 | -2]"
+                    echo "Usage: hltd gen5 [ main | logis | repos | soft ] [-1 | -2]"
                     return 1
                     ;;
                 esac
