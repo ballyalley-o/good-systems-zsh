@@ -1,7 +1,9 @@
 source ~/win-bashrc/mac-zshrc/utilities/colors.sh
+source ~/win-bashrc/mac-zshrc/utilities/loading-bar.sh
 
 ini_path=$HOME/AppData/Roaming/HowickHLCv3
 ini_file=Howick.ini
+ini_abs_path=$HOME/AppData/Roaming/HowickHLCv3/Howick.ini
 
 gen5() {
      case "$1" in
@@ -27,14 +29,17 @@ gen5() {
 	 logis)
 	    cd ~/Documents/HOWICK-repos/finish_profiles/HLCv3 && code  .
 	    ;;
+	config)
+		cd $ini_path && start .
+		;;
 	 repos)
 	    case "$2" in
 	       -1)
-		 cd ~/Documents/HOWICK-repos
-                 ;;
+		 		cd ~/Documents/HOWICK-repos
+				;;
 	       -2)
-		cd ~/Documents/HOWICK-repos && start .
-		;;
+				cd ~/Documents/HOWICK-repos && start .
+				;;
 	       *)
 		echo "Usage: gen5 repos [-1 | -2]"
 		echo
@@ -44,39 +49,52 @@ gen5() {
 		;;
             esac
 	    ;;
+		-p|-profile)
+			ini_file=$ini_abs_path
+			echo "ini_file: $ini_file"
+			prefix="Profile_"
 
-		 # TODO: add a command that adds a profile
+			last_profile_line_number=$(awk -F= -v prefix="$prefix" '
+				/^\['"$prefix"'/ {
+					gsub(/[^0-9]/, "", $1)
+					profile_number = $1
+					if (profile_number > max) max = profile_number
+				}
+				END {
+					print max
+				}
+			' "$ini_file")
 
-                #!/bin/bash
 
-                # ini_file="example.ini"
-                # search_key="key2"
-                # new_key="key5"
-                # new_value="new_value5"
+			if [ -z "$last_profile_line_number" ]; then
+				last_profile_line_number=0
+			fi
 
-                # awk -v search_key="$search_key" -v new_key="$new_key" -v new_value="$new_value" '
-                # BEGIN {
-                #     FS=" *= *"        # Set the field separator to handle spaces around the equal sign
-                #     OFS=" = "         # Set the output field separator
-                #     section_found=0   # Flag to track if the section has been found
-                # }
-                # {
-                #     if ($0 ~ /^\[/) {   # Check if the line starts with '[' indicating a section
-                #         section_found=0
-                #     }
-                #     if (section_found && $1 == search_key) {
-                #         print $0           # Print the original line
-                #         print new_key, new_value   # Append the new key-value pair
-                #         section_found=0     # Reset the flag as we have processed the section
-                #     } else {
-                #         print $0           # Print the original line
-                #     }
-                # }
-                # $1 == "[" section_name "]" {
-                #     section_found=1   # Set the flag when the desired section is found
-                # }
-                # ' "$ini_file" > temp_ini && mv temp_ini "$ini_file"
+			new_profile_key="${prefix}$(($last_profile_line_number + 1))"
 
+			read -p "FLANGE: " flange_size
+			read -p "WEB: " web_size
+
+			size="${flange_size}X${web_size}"
+
+			temp_file=$(mktemp)
+
+			echo -e "[${new_profile_key}]\nSize=${size}\n" > "$temp_file"
+
+			sed -i "/^\[LLCSocketData\]/ {e cat $temp_file
+			}" "$ini_file"
+
+			trap 'rm -f "$temp_file"' EXIT
+
+			echo
+			loading_bar 0.005 ${YELLOW} "Adding Profile:"
+			tput cuu1
+			echo -e "${INVERTED}PROFILE ADDED to $ini_file${RESET}"
+			echo
+			echo -e "${YELLOW} New Profile: ${RESET}"
+			echo "[$new_profile_key]"
+			echo "Size=$size"
+			;;
 	 *)
 	    echo "Usage: gen5 [main | logis | repos] [-1 | -2]"
 	    return 1
