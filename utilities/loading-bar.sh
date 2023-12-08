@@ -1,7 +1,7 @@
 source ~/win-bashrc/mac-zshrc/utilities/colors.sh
 
 # loading bar
-# Usage: loading_bar <duration: 0.2> <color: YELLOW> <message: Searching:>
+# Usage: loading_bar <duration: 0.2> <color: ${YELLOW}> <message: Searching:>
 loading_bar() {
     local width=20
     local duration=${1:-0.2}
