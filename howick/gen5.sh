@@ -54,6 +54,8 @@ gen5() {
 			echo "ini_file: $ini_file"
 			prefix="Profile_"
 
+			# TODO: Duplicate check
+
 			last_profile_line_number=$(awk -F= -v prefix="$prefix" '
 				/^\['"$prefix"'/ {
 					gsub(/[^0-9]/, "", $1)
