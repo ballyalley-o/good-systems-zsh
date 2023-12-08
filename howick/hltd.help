@@ -10,6 +10,7 @@ hltd client             Navigate to the howick portal UI local and open VS Code 
 hltd server             Navigate to the howick portal SERVER local and open VS Code (optional: start server)
 hltd gen5               Navigate to the howick portal SERVER local and open VS Code (optional: start server)
 hltd gen5 main          Navigate to the howick gen5 main local and open VS Code
+hltd gen5 profile       Add a new profile to Howick.ini
 hltd gen5 ini           Navigate to the HowickHLCv3 & Open the machine configuration (ini)
 hltd gen5 logis         Navigate to the howick gen5 logis local and open VS Code
 hltd gen5 repo          Navigate to the howick local repo folder and show the folder
