@@ -62,8 +62,14 @@ hltd() {
                 main)
                 gen5 main .
                 ;;
+                p|profile)
+                gen5 -p
+                ;;
                 ini)
                 gen5 main -i
+                ;;
+                config)
+                gen5 config
                 ;;
                 logis)
                 gen5 logis
@@ -86,7 +92,7 @@ hltd() {
                     cd "~/Documents/Support/Software/HowickHLCv3-SoftRelease"
                     ;;
                 *)
-                    echo "Usage: hltd gen5 [ main | logis | repos | soft ] [-1 | -2]"
+                    echo "Usage: hltd gen5 [ main | profile | logis | repos | soft ] [-1 | -2]"
                     return 1
                     ;;
                 esac
