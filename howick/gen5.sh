@@ -54,8 +54,6 @@ gen5() {
 			echo "ini_file: $ini_file"
 			prefix="Profile_"
 
-			# TODO: Duplicate check
-
 			last_profile_line_number=$(awk -F= -v prefix="$prefix" '
 				/^\['"$prefix"'/ {
 					gsub(/[^0-9]/, "", $1)
@@ -78,6 +76,13 @@ gen5() {
 			read -p "WEB: " web_size
 
 			size="${flange_size}X${web_size}"
+
+			existing_profile=$(awk -F= -v size="$size" '$1 == "Size" && $2 == size { found = 1; exit } END { print found+0 }' "$ini_file")
+
+			if [ "$existing_profile" -eq 1 ]; then
+			    echo "Profile with the same size already exists. Aborting."
+			    return 1
+			fi
 
 			temp_file=$(mktemp)
 
