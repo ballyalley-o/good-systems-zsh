@@ -77,6 +77,12 @@ log() {
             local color=""
             local olorbg=""
 
+            if [ "$dir" = Repositories ]; then
+                color="$GREEN"
+                colorbg="$INVERTED"
+                repo_dir='.'
+            fi
+
             if [ "$dir" = Client ]; then
                 color="$BLUE"
                 colorbg="$BLUEBG"
