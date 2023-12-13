@@ -1,5 +1,8 @@
 # ANSI
 
+# text
+BLACKTXT='\e[30m'
+
 # colors
 RED='\033[1;31m'
 GREEN='\033[1;32m'
@@ -19,6 +22,7 @@ YELLOWBG='\e[43;30m'
 MAGENTABG='\e[1;45m'
 CYANBG='\e[46m'
 ORANGEBG='\e[48;5;208;30m'
+NEONGREENBG='\e[48;5;154;1m'
 WHITEBG='\e[47m'
 INVERTED='\e[7m'
 BLUEWHITE="\e[47;34m"
