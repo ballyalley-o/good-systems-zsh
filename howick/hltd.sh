@@ -11,6 +11,20 @@ hltd() {
 	    this)
 	    howick && cd ~/howick/hcs/hp_dev-new
 	    ;;
+        repo)
+            log hltd Repositories
+            gitn
+            echo
+            echo -n -e "${BLUE} Select a folder: ${RESET}\c"
+            read repo_name
+            if [ -z "$repo_name" ]; then
+               break
+            else
+                echo -e "${YELLOWBG} Launching ${repo_name} .${RESET}"
+                cd $repo_name
+                code .
+            fi
+            ;;
         client)
             log hltd Client
             gitn
