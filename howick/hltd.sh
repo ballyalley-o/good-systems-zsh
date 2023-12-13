@@ -20,7 +20,11 @@ hltd() {
             if [ -z "$repo_name" ]; then
                break
             else
-                echo -e "${YELLOWBG} Launching ${repo_name} .${RESET}"
+                echo -e "${YELLOWBG} Launching ${repo_name} 🚀${RESET}"
+                tput cuu1
+                echo -e "${YELLOWBG} Launching ${repo_name}  🚀${RESET}"
+                tput cuu1
+                echo -e "${YELLOWBG} Launching ${repo_name}   🚀${RESET}"
                 cd $repo_name
                 code .
             fi
