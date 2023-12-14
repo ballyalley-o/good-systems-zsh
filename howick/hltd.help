@@ -6,6 +6,6 @@ Usage:
     hltd [ this | repo | client | server ]
 
 hltd this       Navigate to the howick portal UI local
-hltd repo     Navigate to the howick portal local repos && open VS Code (optional: select folder)
+hltd repo       Navigate to the howick portal local repos && open VS Code (optional: select folder)
 hltd client     Navigate to the howick portal UI local and open VS Code (optional: start client)
 hltd server     Navigate to the howick portal SERVER local and open VS Code (optional: start server)
