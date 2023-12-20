@@ -8,6 +8,8 @@ source ~/mac-zshrc/utilities/functions.sh
 source ~/mac-zshrc/utilities/aliases.sh
 # formatting
 source ~/mac-zshrc/utilities/formatting.sh
+# font switch
+source ~/mac-zshrc/utilities/font-switch.sh
 # logging
 source ~/mac-zshrc/utilities/logging.sh
 # workspace
