@@ -1,4 +1,4 @@
-source ~/mac-zshrc/utilities/colors.sh
+source ~/win-bashrc/mac-zshrc/utilities/colors.sh
 
 fontsw() {
     settings_file="$HOME/AppData/Roaming/Code/User/settings.json"
