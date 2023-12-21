@@ -41,14 +41,14 @@ hltd() {
 	    sync)
             case $2 in
             -c|-code)
-                cd ~/howick/sync/sync-machine/howick-sync-machine && code .
+                cd ~/howick/sync/sync-machine && code .
             ;;
             -s|-start)
-                cd ~/howick/sync/sync-machine/howick-sync-machine && start .
+                cd ~/howick/sync/sync-machine && start .
                 gitn
             ;;
             -i|-ini)
-                cd ~/desktop/sync-machine/howick-sync-machine/data && start Howick.ini
+                cd ~/desktop/sync-machine/data && start Howick.ini
                 echo -e "${MAGENTABG} 🤡 Mock ini Opened ${RESET}"
             ;;
             *)
