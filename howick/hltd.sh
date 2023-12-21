@@ -41,10 +41,10 @@ hltd() {
 	    sync)
             case $2 in
             -c|-code)
-                cd ~/desktop/sync-machine/howick-sync-machine && code .
+                cd ~/howick/sync/sync-machine/howick-sync-machine && code .
             ;;
             -s|-start)
-                cd ~/desktop/sync-machine/howick-sync-machine && start .
+                cd ~/howick/sync/sync-machine/howick-sync-machine && start .
                 gitn
             ;;
             -i|-ini)
