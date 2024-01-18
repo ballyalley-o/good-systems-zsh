@@ -21,4 +21,3 @@ frmt() {
         echo -e "${DARKGRAY} ⎿ Auto-formatting on Paste ENABLED.${RESET}"
     fi
 }
-

@@ -11,12 +11,12 @@ iod() {
     case "$1" in
         .|show)
             cd ~/iod
-            log . "IOD main in VS Code" IOD
+            log . "IOD main in VS Code" Prog
             code .
             ;;
         go)
             if [ -z "$2" ]; then
-                read_doc $doc "NR>=84 && NR<=94"
+                read_doc $doc "NR>=86 && NR<=96"
                 return 1
             fi
 
@@ -101,7 +101,7 @@ iod() {
 
         m|module)
             if [ -z "$2" ]; then
-                read_doc $doc "NR>=48 && NR<=57"
+                read_doc $doc "NR>=50 && NR<=59"
                 return 1
             fi
 
@@ -266,13 +266,13 @@ iod() {
                              echo -e "${YELLOWBG}                                                                                     ${RESET}"
                             ;;
                         *)
-                            read_doc $doc "NR>=60 && NR<=72"
+                            read_doc $doc "NR>=61 && NR<=73"
                             ;;
                     esac
                     ;;
                 -go|go)
                     if [ -z "$3" ]; then
-                        read_doc $doc "NR>=74 && NR<=83"
+                        read_doc $doc "NR>=75 && NR<=84"
                         return 1
                     fi
 
@@ -283,7 +283,7 @@ iod() {
                     ;;
                 -get)
                     if [ -z "$3" ]; then
-                        read_doc $doc "NR=21"
+                        read_doc $doc "NR=22"
                         return 1
                     fi
 
@@ -291,7 +291,7 @@ iod() {
                     ;;
                 -labs|labs|l)
                     if [ -z "$4" ]; then
-                        read_doc $doc "NR>=22 && NR<=23"
+                        read_doc $doc "NR>=23 && NR<=26"
                         return 1
                     fi
 
@@ -303,12 +303,26 @@ iod() {
                     iods labs "$student_name" "$module_number" "$repo_url" "$@"
                     ;;
                 *)
-                    read_doc $doc "NR>=28 && NR<=47"
+                    read_doc $doc "NR>=29 && NR<=48"
+                    ;;
+            esac
+            ;;
+        r|report)
+            case "$2" in
+                --p|print)
+                    cd ~/iod/progress
+                    log . "IOD progress in VS Code" "Report Card"
+                    python3 builder.py
+
+                    open pdf
+                    ;;
+                *)
+                    read_doc $doc "NR=9"
                     ;;
             esac
             ;;
         *)
-            read_doc $doc "NR<=26"
+            read_doc $doc "NR<=27"
             ;;
     esac
 }
