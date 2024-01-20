@@ -1,5 +1,10 @@
-source ~/mac-zshrc/utilities/colors.sh
-
+# Function to toggle auto-formatting settings in VS Code.
+# This function checks the user's VS Code settings file and toggles the "editor.formatOnSave" and "editor.formatOnPaste" properties.
+# If either of these properties is set to true, it will be changed to false, and vice versa.
+# After toggling the settings, it displays a loading bar and prints the status of auto-formatting.
+# If auto-formatting is disabled, it will display a red message indicating that auto-formatting is disabled on save and paste.
+# If auto-formatting is enabled, it will display a green message indicating that auto-formatting is enabled on save and paste.
+# This function depends on the "loading_bar" and "colors.sh" scripts.
 frmt() {
     settings_file="$HOME/Library/Application Support/Code/User/settings.json"
 
