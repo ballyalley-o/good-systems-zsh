@@ -1,3 +1,13 @@
+# This script file contains the definition of the `iod` function, which is a command-line tool for navigating and managing the IOD (Introduction to Object-Oriented Design) project.
+
+# The `iod` function supports the following commands:
+# - `.` or `show`: Opens the IOD main project in VS Code.
+# - `go`: Navigates to a specific module or subfolder within a module.
+# - `m` or `module`: Navigates to a specific module and provides options for opening subfolders or files within the module.
+
+# The script also sources several utility scripts and sets up variables for command documentation and file paths.
+
+# Usage: source ~/mac-zshrc/iod/iod.sh
 source ~/mac-zshrc/utilities/colors.sh
 source ~/mac-zshrc/utilities/logging.sh
 source ~/mac-zshrc/utilities/read-doc.sh -h
@@ -6,6 +16,15 @@ source ~/mac-zshrc/iod/iods.sh
 
 # command documentation
 doc=$HOME/mac-zshrc/iod/docs/iod.help
+iod_go=$HOME/mac-zshrc/iod/docs/go.help
+iod_labs=$HOME/mac-zshrc/iod/docs/iod.labs.help
+iod_module=$HOME/mac-zshrc/iod/docs/iod.module.help
+iod_students=$HOME/mac-zshrc/iod/docs/iod.students.help
+iod_students_list=$HOME/mac-zshrc/iod/docs/iod.students.list.help
+iod_students_go=$HOME/mac-zshrc/iod/docs/iod.students.go.help
+iods=$HOME/mac-zshrc/iod/docs/iods.help
+iods_go=$HOME/mac-zshrc/iod/docs/iods_go.help
+
 
 iod() {
     case "$1" in
@@ -16,7 +35,7 @@ iod() {
             ;;
         go)
             if [ -z "$2" ]; then
-                read_doc $doc "NR>=86 && NR<=96"
+                read_doc $iod_go
                 return 1
             fi
 
@@ -101,7 +120,7 @@ iod() {
 
         m|module)
             if [ -z "$2" ]; then
-                read_doc $doc "NR>=50 && NR<=59"
+                read_doc $iod_module
                 return 1
             fi
 
@@ -266,13 +285,13 @@ iod() {
                              echo -e "${YELLOWBG}                                                                                     ${RESET}"
                             ;;
                         *)
-                            read_doc $doc "NR>=61 && NR<=73"
+                            read_doc $iod_students_list
                             ;;
                     esac
                     ;;
                 -go|go)
                     if [ -z "$3" ]; then
-                        read_doc $doc "NR>=75 && NR<=84"
+                        read_doc $iod_students_go
                         return 1
                     fi
 
@@ -283,7 +302,7 @@ iod() {
                     ;;
                 -get)
                     if [ -z "$3" ]; then
-                        read_doc $doc "NR=22"
+                        read_doc $doc "NR=23"
                         return 1
                     fi
 
@@ -291,7 +310,7 @@ iod() {
                     ;;
                 -labs|labs|l)
                     if [ -z "$4" ]; then
-                        read_doc $doc "NR>=23 && NR<=26"
+                        read_doc $doc "NR>=24 && NR<=28"
                         return 1
                     fi
 
@@ -303,7 +322,7 @@ iod() {
                     iods labs "$student_name" "$module_number" "$repo_url" "$@"
                     ;;
                 *)
-                    read_doc $doc "NR>=29 && NR<=48"
+                    read_doc $iod_students
                     ;;
             esac
             ;;
@@ -316,13 +335,19 @@ iod() {
 
                     open pdf
                     ;;
+                --o|open)
+                    cd ~/iod/progress
+                    log . "IOD progress in VS Code" "Report Card"
+
+                    open pdf
+                    ;;
                 *)
-                    read_doc $doc "NR=9"
+                    read_doc $doc "NR>=9 && NR<=10"
                     ;;
             esac
             ;;
         *)
-            read_doc $doc "NR<=27"
+            read_doc $doc "NR<=28"
             ;;
     esac
 }
