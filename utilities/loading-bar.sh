@@ -1,7 +1,12 @@
 source ~/mac-zshrc/utilities/colors.sh
 
-# loading bar
+# loading_bar
 # Usage: loading_bar <duration: 0.2> <color: YELLOW> <message: Searching:>
+# This function displays a loading bar animation on the terminal.
+# Parameters:
+#   - duration: The duration between each animation frame in seconds. Default is 0.2 seconds.
+#   - color: The color of the loading bar. Default is YELLOW.
+#   - message: The message to display before the loading bar. Default is "Searching:".
 loading_bar() {
     local width=20
     local duration=${1:-0.2}
