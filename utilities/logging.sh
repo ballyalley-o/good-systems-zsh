@@ -1,6 +1,21 @@
+# Function: log
+# Description: This function is used for logging and displaying messages with different styles and colors.
+# Parameters:
+#   - $1: The log type. It can be one of the following:
+#       - ".": Used for general logging.
+#       - "bg" or "bgood": Used for logging in the bgood workspace.
+#       - "hp" or "hltd": Used for logging in the Howick Portal.
+#   - $2: The project name or function name, depending on the log type.
+#   - $3: The directory name. Default is "root".
+#   - $4: The function name. Default is empty.
+#   - $5: The loadbar title. Default is "Navigating:".
+#   - $6: The text color. Default is "$BLUE".
+#   - $7: The background color. Default is "$BLUEBG".
+#   - $8: The work name. Default is the project name.
+# Returns: None
+
 source ~/mac-zshrc/utilities/colors.sh
 
-# logging
 log() {
     case "$1" in
         .)
