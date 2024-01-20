@@ -1,3 +1,14 @@
+# Function: iods
+# Description: This function is used to perform various operations related to the IOD (Introduction to Open Development) project.
+# Parameters:
+#   - $1: The operation to perform. Possible values: "go", "l", "labs".
+#   - $2: (Optional) The student name.
+#   - $3: (Optional) The module number.
+#   - $4: (Optional) The student repository.
+# Usage: iods <operation> [<student_name> [<module_number> [<student_repository>]]]
+iods() {
+    # Function logic...
+}
 source ~/mac-zshrc/utilities/colors.sh
 source ~/mac-zshrc/utilities/logging.sh
 source ~/mac-zshrc/utilities/functions.sh
