@@ -1,0 +1,13 @@
+iods Command ( utility for iod )
+
+Usage:
+
+    iods [ go <student_name> <module_number> | labs  <student_name> <module#> <repo_url> [options] ]
+
+iods go <student_name> <module#>                            Navigate to students specific lab module & Open VS Code
+iods go <student_name> -c                                   Navigate to students capstone folder & Open VS Code
+iods labs <student_name> <module#> <repo_url> [options]     Navigate to specific students folder clone a repository
+
+    Options:
+        -f, --folder <folder_name>   Specify folder name (optional)
+        -o, --open-cloned            Navigate to cloned repository and Open VS Code (optional)

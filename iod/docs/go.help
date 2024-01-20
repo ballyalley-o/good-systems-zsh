@@ -1,0 +1,10 @@
+
+iod go Command
+
+Usage:
+
+    iod go <module_number> [ --clone <git_repo> ]
+
+iod go <module_number>                            Navigate to labs folder with specific module and Open VS Code
+iod go <module_number> --clone <git_repo>         Navigates to specific labs module folder, clone the repo and open VS Code
+iod go -c                                         Navigate to labs folder, specifically to Capstone

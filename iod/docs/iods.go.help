@@ -1,0 +1,9 @@
+
+iods go Command
+
+Usage:
+
+    iods go <student_name> <module_number>
+
+iods go <student_name> <module#>      Navigate to students specific lab module & Open VS Code
+iods go <student_name> -c             Navigate to students capstone folder & Open VS Code

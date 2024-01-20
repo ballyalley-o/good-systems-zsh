@@ -3,10 +3,11 @@ iod Command
 
 Usage:
 
-    iod [ go [ -c | [ --clone ] | module | show | students [ -list [ . | -l | -e | -u ] | -labs ]  | report [ -print ] ]
+    iod [ go [ -c | [ --clone ] | module | show | students [ -list [ . | -l | -e | -u ] | -labs ]  | report [ --print | --open ] ]
 
 iod show                                          Navigates to iod folder and open VS Code
-iod report -print                                 Print Student Report card and Navigate to folder destination
+iod report --print                                Print Student Report card and Navigate to folder destination
+iod report --open                                 Navigate to folder destination of Student Report Card (pdfs)
 iod go -c                                         Navigates to labs capstone folder in iod and open VS Code
 iod go <module_number>                            Navigates to specific labs module folder in iod and open VS Code
 iod go <module_number> --clone <git_repo>         Navigates to specific labs module folder, clone the repo and open VS Code

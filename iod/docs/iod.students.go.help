@@ -1,0 +1,9 @@
+
+iod students -go Command
+
+Usage:
+
+    iod students -go <students_name> <module_number>
+
+iod students -go <student_name> <module_number>   Navigate to students specific lab folder and Open VS Code"
+iod students -go <student_name> -c                Navigate to students capstone folder and Open VS Code"

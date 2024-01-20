@@ -1,0 +1,9 @@
+iods labs Command
+
+Usage:
+
+    iods labs <student_name> <module#> <repo_url> [options]
+
+    Options:
+        -f, --folder <folder_name>   Specify folder name (optional)
+        -o, --open-cloned            Navigate to cloned repository and Open VS Code (optional)

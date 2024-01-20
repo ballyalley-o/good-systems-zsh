@@ -1,0 +1,11 @@
+iod students -list Command
+
+Usage:
+
+    iod students -list [ . | -l  | -e  | -u | -all ]
+
+iod students -list .              Shows the list of students
+iod students -list --l            Shows the list of students with lastname
+iod students -list --e            Shows the list of students email
+iod students -list --u            Shows the list of students Github username
+iod students -list --all          Shows the list of students with all details

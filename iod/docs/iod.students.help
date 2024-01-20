@@ -1,0 +1,19 @@
+
+iod students Command
+
+Usage:
+
+    iod students [ -list | -go | -get | -labs ]
+
+iod students -list .                              Shows the list of students
+iod students -list --l                            Shows the list of students with lastname
+iod students -list --e                            Shows the list of students email
+iod students -list --u                            Shows the list of students Github username
+iod students -list --all                          Shows the list of students with all details
+iod students -go <student_name> <module_number>   Navigate to students specific lab folder and Open VS Code
+iod students -go <student_name> -c                Navigate to students capstone folder and Open VS Code
+iod students -get <student_name>                  Shows the student details (full name, email and git username)
+iod students -labs <student_name> <module#> <repo_url> [options]...
+                                                  ..Clone a repository to students laboratory exercises
+    Options:
+        -f --folder <folder_name>                 Specify the folder name (optional)

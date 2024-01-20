@@ -1,0 +1,8 @@
+iod module Command
+
+Usage:
+
+    iod module <module_number> [ -c ]
+
+iod module <module_number>    Navigate to modules folder, to specific module number and Open VS Code
+iod module -c                 Navigate to modules folder, to Capstone and Open VS Code
