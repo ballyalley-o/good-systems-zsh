@@ -33,6 +33,11 @@ iod() {
             log . "IOD main in VS Code" Prog
             code .
             ;;
+        progress)
+            cd ~/iod/progress
+            log . "IOD progress in VS Code" "Report Cards"
+            code .
+            ;;
         go)
             if [ -z "$2" ]; then
                 read_doc $iod_go
@@ -308,7 +313,7 @@ iod() {
 
                     get_student "$3"
                     ;;
-                -labs|labs|l)
+                -labs|l)
                     if [ -z "$4" ]; then
                         read_doc $doc "NR>=24 && NR<=28"
                         return 1
@@ -321,7 +326,38 @@ iod() {
 
                     iods labs "$student_name" "$module_number" "$repo_url" "$@"
                     ;;
-                *)
+            -r|report)
+                    case "$3" in
+                        "")
+                            read_doc $doc "NR=23"
+                            return 1
+                            ;;
+                        *)
+                            student_name=$(echo "$3" | tr '[:lower:]' '[:upper:]')
+                            case "$4" in
+                                --p|print)
+                                    cd ~/iod/progress
+                                    log . "IOD progress in VS Code" "Report Card"
+                                    python3 builder.py
+
+                                    cd pdf
+
+                                    open "$student_name.pdf"
+                                    ;;
+                                --o|open)
+                                    cd ~/iod/progress
+                                    log . "IOD progress in VS Code" "$student_name Report Card"
+                                    cd pdf
+                                    open "$student_name.pdf"
+                                    ;;
+                                *)
+                                    read_doc $doc "NR>=9 && NR<=10"
+                                    ;;
+                            esac
+                            ;;
+                    esac
+                    ;;
+            *)
                     read_doc $iod_students
                     ;;
             esac
