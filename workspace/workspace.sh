@@ -1,3 +1,22 @@
+# This script defines the `workspace` function, which is used to manage workspace-related operations.
+# The function accepts different commands as arguments and performs corresponding actions.
+# The supported commands are:
+#   - `.` or `open`: Opens various workspace-related files and folders.
+#   - `c` or `create`: Creates a new folder in the workspace.
+#   - `g` or `git`: Clones a Git repository into the workspace.
+#   - `i` or `invoice`: Navigates to the IOD Invoice document in the workspace.
+#
+# The function also sources several utility scripts and reads documentation from a help file.
+# It makes use of various flags and options to control the behavior of the commands.
+# The script is designed to be used with the Zsh shell.
+#
+# Usage:
+#   workspace <command> [options]
+#
+# Example:
+#   workspace . -o -u -z -p my_project
+#
+# For more information, refer to the documentation in the script.
 source ~/mac-zshrc/utilities/logging.sh
 source ~/mac-zshrc/utilities/colors.sh
 source ~/mac-zshrc/utilities/functions.sh
