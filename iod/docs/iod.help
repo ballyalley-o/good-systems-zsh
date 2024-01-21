@@ -6,8 +6,9 @@ Usage:
     iod [ go [ -c | [ --clone ] | module | show | students [ -list [ . | -l | -e | -u ] | -labs ]  | report [ --print | --open ] ]
 
 iod show                                          Navigates to iod folder and open VS Code
-iod report --print                                Print Student Report card and Navigate to folder destination
+iod report --print                                Print All Students Report card and Navigate to folder destination
 iod report --open                                 Navigate to folder destination of Student Report Card (pdfs)
+iod report --all                                  Convert the progress markdon to csv, Open CSV in VS Code
 iod go -c                                         Navigates to labs capstone folder in iod and open VS Code
 iod go <module_number>                            Navigates to specific labs module folder in iod and open VS Code
 iod go <module_number> --clone <git_repo>         Navigates to specific labs module folder, clone the repo and open VS Code
@@ -21,6 +22,8 @@ iod students -list --all                          Shows the list of students wit
 iod students -go <student_name> <module_number>   Navigate to students specific lab folder and Open VS Code
 iod students -go <student_name> -c                Navigate to students capstone folder and Open VS Code
 iod students -get <student_name>                  Shows the student details (full name, email and git username)
+iod students -report <student_name> --print       Print specific Student Report card and Open the pdf
+iod students -report <student_name> --open        Open specific Student Report Card
 iod students -labs <student_name> <module#> <repo_url> [options]...
                                                   ..Clone a repository to students laboratory exercises
     Options:
