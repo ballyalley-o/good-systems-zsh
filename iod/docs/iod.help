@@ -24,6 +24,7 @@ iod students -go <student_name> -c                Navigate to students capstone 
 iod students -get <student_name>                  Shows the student details (full name, email and git username)
 iod students -report <student_name> --print       Print specific Student Report card and Open the pdf
 iod students -report <student_name> --open        Open specific Student Report Card
+iod students -report <student_name> --fasttrack   Quick print in the shell the specific students progress
 iod students -labs <student_name> <module#> <repo_url> [options]...
                                                   ..Clone a repository to students laboratory exercises
     Options:
