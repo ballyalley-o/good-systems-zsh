@@ -358,8 +358,16 @@ iod() {
 
                                     echo -n -e "${BLUEBG} 📖 Opening $student_name.pdf ${RESET} "
                                     ;;
+                                --ft|fasttrack)
+                                    cd ~/iod/progress
+                                    log . "IOD progress in VS Code" "$student_name Report Card"
+
+                                    echo -n -e "${BLUEBG} ⚡️ Fast tracking $student_name progress ${RESET} "
+
+                                    python3 builder_sh.py $student_name
+                                    ;;
                                 *)
-                                    read_doc $doc "NR>=25 && NR<=26"
+                                    read_doc $doc "NR>=25 && NR<=27"
                                     ;;
                             esac
                             ;;
@@ -398,7 +406,7 @@ iod() {
             esac
             ;;
         *)
-            read_doc $doc "NR<=31"
+            read_doc $doc "NR<=32"
             ;;
     esac
 }
