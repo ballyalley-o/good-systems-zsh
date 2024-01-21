@@ -338,20 +338,28 @@ iod() {
                                 --p|print)
                                     cd ~/iod/progress
                                     log . "IOD progress in VS Code" "Report Card"
-                                    python3 builder.py
+                                    python3 builder_per.py $student_name
+                                    python3 builder_sh.py $student_name
 
                                     cd pdf
 
                                     open "$student_name.pdf"
+
+                                    echo -n -e "${BLUEBG} 📖 Opening $student_name.pdf ${RESET} "
                                     ;;
                                 --o|open)
                                     cd ~/iod/progress
                                     log . "IOD progress in VS Code" "$student_name Report Card"
+                                    python3 builder_sh.py $student_name
+
                                     cd pdf
+
                                     open "$student_name.pdf"
+
+                                    echo -n -e "${BLUEBG} 📖 Opening $student_name.pdf ${RESET} "
                                     ;;
                                 *)
-                                    read_doc $doc "NR>=9 && NR<=10"
+                                    read_doc $doc "NR>=25 && NR<=26"
                                     ;;
                             esac
                             ;;
@@ -377,13 +385,20 @@ iod() {
 
                     open pdf
                     ;;
+                --a|all)
+                    cd ~/iod/progress
+                    log . "IOD progress in VS Code" "Report Card"
+
+                    python3 builder_all.py
+                    code students/progress-all.csv
+                    ;;
                 *)
-                    read_doc $doc "NR>=9 && NR<=10"
+                    read_doc $doc "NR>=9 && NR<=11"
                     ;;
             esac
             ;;
         *)
-            read_doc $doc "NR<=28"
+            read_doc $doc "NR<=31"
             ;;
     esac
 }
