@@ -76,6 +76,8 @@ workspace() {
 
                         shift 2
                         open_project_helper="open"
+
+                        code .
                         ;;
                     *)
                         shift
