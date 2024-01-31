@@ -362,7 +362,7 @@ iod() {
                                     cd ~/iod/progress
                                     log . "IOD progress in VS Code" "$student_name Report Card"
 
-                                    echo -n -e "${BLUEBG} ⚡️ Fast tracking $student_name progress ${RESET} "
+                                    echo -n -e "${BLUEBG} ⚡️ Fast tracking $student_name's progress ${RESET} "
 
                                     python3 builder_sh.py $student_name
                                     ;;
