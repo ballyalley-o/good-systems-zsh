@@ -55,6 +55,22 @@ hltd() {
                 echo -e "${YELLOWBG} Server not started.${RESET}"
             fi
             ;;
+        logo)
+            log . "Howick Branding" Logos
+
+            echo
+
+            cd ~/howick/branding/Logos
+            open .
+            ;;
+        branding)
+            log . "Howick Branding" "Branding Guidelines"
+
+            echo
+
+            cd ~/howick/branding
+            open Howick-Brand_Guidelines_2020.pdf
+            ;;
         *)
         read_doc $htld_doc
         ;;
