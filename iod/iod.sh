@@ -1,4 +1,4 @@
-# This script file contains the definition of the `iod` function, which is a command-line tool for navigating and managing the IOD (Introduction to Object-Oriented Design) project.
+# This script file contains the definition of the `iod` function, which is a command-line tool for navigating and managing a class.
 
 # The `iod` function supports the following commands:
 # - `.` or `show`: Opens the IOD main project in VS Code.
