@@ -66,18 +66,14 @@ workspace() {
                         fi
                         open_project_flag=true
                         folder_name="$2"
-                        log . Workspace "$folder_name"
+
+                        # if [ ! -d "$folder_name" ]; then
+                        #     echo -e "${RED}${folder_name} folder doesn't exist${RESET}"
+                        #     return 0
+                        # fi
                         work
-
-                        if [ ! -d "$folder_name" ]; then
-                            echo -e "${RED}${folder_name} folder doesn't exist${RESET}"
-                            return 0
-                        fi
-
                         shift 2
                         open_project_helper="open"
-
-                        code .
                         ;;
                     *)
                         shift
@@ -112,7 +108,11 @@ workspace() {
                 fi
 
                 cd "$folder_name"
+                log . Workspace "$folder_name"
+
                 gitn
+
+                code .
             fi
             ;;
 
