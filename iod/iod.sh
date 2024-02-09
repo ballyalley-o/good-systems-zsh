@@ -383,7 +383,7 @@ iod() {
                 --p|print)
                     cd ~/iod/progress
                     log . "IOD progress in VS Code" "Report Card"
-                    python3 builder.py
+                    python3 builder.py something
 
                     open pdf
                     ;;
@@ -405,6 +405,7 @@ iod() {
                     ;;
             esac
             ;;
+
         *)
             read_doc $doc "NR<=32"
             ;;
