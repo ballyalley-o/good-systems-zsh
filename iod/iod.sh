@@ -373,6 +373,28 @@ iod() {
                             ;;
                     esac
                     ;;
+            -g|grade)
+                case "$3" in
+                    "")
+                         read_doc $doc "NR>=18 && NR<=19"
+                        ;;
+                    *)
+                        student_name=$(echo "$3" | tr '[:lower:]' '[:upper:]')
+                        module_number="m$4"
+                        exercise_number="e$5"
+                        status_exercise="$6"
+
+                        cd ~/iod/progress/csv
+                        log . "IOD progress in VS Code" "Grading Sheet"
+                        # ./grade.sh bob m9 e5 x
+                        ./grade.sh $student_name $module_number $exercise_number $status_exercise
+
+                        echo -n -e  "\n"
+                        echo -n -e "${INVERTED} $student_name 〉 Module: $4 - Exercise: $5 Marked $status_exercise ${RESET} "
+                        echo -n -e  "\n"
+                        ;;
+            esac
+            ;;
             *)
                     read_doc $iod_students
                     ;;
@@ -405,7 +427,6 @@ iod() {
                     ;;
             esac
             ;;
-
         *)
             read_doc $doc "NR<=32"
             ;;
