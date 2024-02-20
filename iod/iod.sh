@@ -385,7 +385,7 @@ iod() {
                         status_exercise="$6"
 
                         cd ~/iod/progress/csv
-                        log . "IOD progress in VS Code" "Grading Sheet"
+                        log . "IOD CLI in VS Code" "Grading Sheet"
                         # ./grade.sh bob m9 e5 x
                         ./grade.sh $student_name $module_number $exercise_number $status_exercise
 
