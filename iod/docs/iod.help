@@ -25,6 +25,8 @@ iod students -get <student_name>                  Shows the student details (ful
 iod students -report <student_name> --print       Print specific Student Report card and Open the pdf
 iod students -report <student_name> --open        Open specific Student Report Card
 iod students -report <student_name> --fasttrack   Quick print in the shell the specific students progress
+iod students -grade <student_name> <module_number> <exercise_number> <status> ...
+                                                  ..Mark or Tick the students assignment status accordingly
 iod students -labs <student_name> <module#> <repo_url> [options]...
                                                   ..Clone a repository to students laboratory exercises
     Options:

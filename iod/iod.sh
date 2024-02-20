@@ -307,7 +307,7 @@ iod() {
                     ;;
                 -get)
                     if [ -z "$3" ]; then
-                        read_doc $doc "NR=23"
+                        read_doc $doc "NR=24"
                         return 1
                     fi
 
@@ -315,7 +315,7 @@ iod() {
                     ;;
                 -labs|l)
                     if [ -z "$4" ]; then
-                        read_doc $doc "NR>=24 && NR<=28"
+                        read_doc $doc "NR>=30 && NR<=34"
                         return 1
                     fi
 
@@ -376,7 +376,7 @@ iod() {
             -g|grade)
                 case "$3" in
                     "")
-                         read_doc $doc "NR>=18 && NR<=19"
+                         read_doc $doc "NR>=28 && NR<=29"
                         ;;
                     *)
                         student_name=$(echo "$3" | tr '[:lower:]' '[:upper:]')
