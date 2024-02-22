@@ -4,6 +4,9 @@
 # - `.` or `show`: Opens the IOD main project in VS Code.
 # - `go`: Navigates to a specific module or subfolder within a module.
 # - `m` or `module`: Navigates to a specific module and provides options for opening subfolders or files within the module.
+# - `s` or `students`: Provides options for navigating to a student's repository, listing students, and opening a student's labs.
+# - `r` or `report`: Provides options for generating and opening report cards for students.
+# - `sc` or `scan`: Provides options for scanning and generating reports for student progress.
 
 # The script also sources several utility scripts and sets up variables for command documentation and file paths.
 
@@ -447,6 +450,19 @@ iod() {
                         log . "IOD CLI in VS Code" "Module Scan"
                         # python3 all_row_module <module_number>
                         python3 per_row_m.py $module_number
+                        ;;
+                    -p|print)
+                        module_number="m$3"
+
+                        cd ~/iod/progress
+                        log . "IOD CLI in VS Code" "Module Scan --print"
+                        # python3 per_row_m_pdf.py <module_number>
+                        python3 per_row_m_pdf.py $module_number
+                        cd pdf
+                        open "${module_number}_report.pdf"
+
+                        echo -e "${REDBG} SCANNED and OPENING THE LIST ${RESET}"
+                        echo -e "\n"
                         ;;
                     *)
                          read_doc $iod_scan
