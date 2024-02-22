@@ -5,6 +5,7 @@ Usage:
 
     iods [ scan | sc ] -m <module_number>
 
-iods scan -m <module#>                          Scan All exercises against a Module to check students who are failed to complete/submit and Print it in the console
 iods scan -e <module#> <exercise#> <status>     Scan an exercise to check all the students who failed to complete/submit and Print it in the console
+iods scan -m <module#>                          Scan All exercises against a Module to check students who are failed to complete/submit and Print it in the console
+iods scan -p <module#>                          Scan All exercises against a Module to check students who are failed to complete/submit and Print it in a PDF
 
