@@ -22,6 +22,7 @@ iod_module=$HOME/mac-zshrc/iod/docs/iod.module.help
 iod_students=$HOME/mac-zshrc/iod/docs/iod.students.help
 iod_students_list=$HOME/mac-zshrc/iod/docs/iod.students.list.help
 iod_students_go=$HOME/mac-zshrc/iod/docs/iod.students.go.help
+iod_scan=$HOME/mac-zshrc/iod/docs/iod.scan.help
 iods=$HOME/mac-zshrc/iod/docs/iods.help
 iods_go=$HOME/mac-zshrc/iod/docs/iods_go.help
 
@@ -380,7 +381,7 @@ iod() {
                         ;;
                     *)
                         student_name=$(echo "$3" | tr '[:lower:]' '[:upper:]')
-                        module_number="m$4"
+                        module_number="$4"
                         exercise_number="e$5"
                         status_exercise="$6"
 
@@ -391,7 +392,7 @@ iod() {
 
                         echo -n -e  "\n"
                         echo -n -e "${INVERTED} $student_name 〉 Module: $4 - Exercise: $5 Marked $status_exercise ${RESET} "
-                        echo -n -e  "\n"
+                        echo -e "\n"
                         ;;
             esac
             ;;
@@ -427,6 +428,31 @@ iod() {
                     ;;
             esac
             ;;
+         sc|scan)
+                case "$2" in
+                    -e|exercise)
+                        module_number="m$3"
+                        exercise_number="e$4"
+                        _status="$5"
+
+                        cd ~/iod/progress
+                        log . "IOD CLI in VS Code" "Module Exercise Scan"
+                        # python3 per_row_e <module_number> <exercise_number> <status>
+                        python3 per_row_e.py $student_name $module_number $exercise_number $_status
+                        ;;
+                    -m|.)
+                        module_number="m$3"
+
+                        cd ~/iod/progress
+                        log . "IOD CLI in VS Code" "Module Scan"
+                        # python3 all_row_module <module_number>
+                        python3 per_row_m.py $module_number
+                        ;;
+                    *)
+                         read_doc $iod_scan
+                        ;;
+                esac
+                ;;
         *)
             read_doc $doc "NR<=32"
             ;;
