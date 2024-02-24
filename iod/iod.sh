@@ -275,10 +275,16 @@ iod() {
             echo -n -e "${BLUEBG} ⏳ Converting CSV sheet to Markdown/Gist ${RESET} "
 
             python3 builder_csv_md.py
+            # echo -n -e "${NEONGREEN} ⚡️ Success! ${RESET}"
+
+            echo -e "${BLUEBG} UPLOADING... ${RESET}"
+            loading_bar 0.01 ${NEONGREEN} UPLOADING... 100% COMPLETE ${RESET}
+            tput cuu1
+            tput cuu1
+
+            python3 builder_gist_patch.py
 
             echo -n -e "${NEONGREEN} ⚡️ Success! ${RESET}"
-
-
             ;;
         s|students)
             case "$2" in
