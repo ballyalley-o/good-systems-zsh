@@ -267,7 +267,17 @@ iod() {
             cd ~
             return 1
             ;;
+        c|convert)
+            log . "IOD CLI hub in VS Code" "Convert"
 
+            cd ~/iod/progress
+
+            echo -n -e "${BLUEBG} ⏳ Converting CSV sheet to Markdown/Gist ${RESET} "
+
+            python3 builder_csv_md.py
+
+            echo -n -e "${NEONGREEN} ⚡️ Success! ${RESET} "
+            ;;
         s|students)
             case "$2" in
                 -list)

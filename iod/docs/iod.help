@@ -32,6 +32,9 @@ iod students -labs <student_name> <module#> <repo_url> [options]...
     Options:
         -f --folder <folder_name>                 Specify the folder name (optional)
 
+iod convert                                       Convert CSV grading sheet to Markdown/Gist sheet and push to gist page
+
+
 # ---------------------------------------------------------------------------------------------------------------------------
 
 iod students Command
