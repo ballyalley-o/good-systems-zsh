@@ -276,7 +276,9 @@ iod() {
 
             python3 builder_csv_md.py
 
-            echo -n -e "${NEONGREEN} ⚡️ Success! ${RESET} "
+            echo -n -e "${NEONGREEN} ⚡️ Success! ${RESET}"
+
+
             ;;
         s|students)
             case "$2" in
