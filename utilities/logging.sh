@@ -104,6 +104,12 @@ log() {
                 repo_dir=hp_dev-new
             fi
 
+            if [ "$dir" = ClientC ]; then
+                color="$NEONGREENBG"
+                colorbg="$INVERTED"
+                repo_dir=howick-customer-portal/howick-customer-portal
+            fi
+
             if [ "$dir" = Server ]; then
                 color="$ORANGE"
                 colorbg="$ORANGEBG"
@@ -117,10 +123,24 @@ log() {
             cd $HOME/howick/hcs/"$repo_dir"
             tput cuu1
             echo -e "${color} Launching Howick Portal ${RESET}"
-            code .
-            tput cuu1
-            echo -e "❖ ${colorbg} Welcome to Howick Portal ${RESET} 〉 ${DARKGRAY} ${dir} ${RESET}"
-            echo
+
+            if [ "$dir" = "Repositories" ]; then
+                tput cuu1
+                echo -e "❖ ${colorbg} Welcome to Howick Portal ${RESET} 〉 ${DARKGRAY} ${dir} ${RESET}"
+                cd $HOME/howick/hcs
+                echo
+                return 0
+            fi
+
+            if [ $dir = "Client" ] || [ $dir = "Server" ] || [ $dir = "ClientC" ]; then
+                code .
+                tput cuu1
+                echo -e "❖ ${colorbg} Welcome to Howick Portal ${RESET} 〉 ${DARKGRAY} ${dir} ${RESET}"
+                echo
+                return 0
+            fi
+
+            echo -e "${color} 🚀 ${RESET}"
             ;;
         *)
             echo "Invalid log type"
