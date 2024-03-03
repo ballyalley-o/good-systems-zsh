@@ -30,17 +30,77 @@ hltd() {
             fi
             ;;
         client)
-            log hltd Client
-            gitn
-            echo
-            echo -n -e "${BLUE} Start the Client? (yes/no):${RESET}\c"
-            read start_client
-            if [ "$start_client" = "yes" ] || [ "$start_client" = "y" ]; then
-                echo -e "${BLUE} Starting the client...${RESET}"
-                npm start
-            else
-                echo -e "${YELLOWBG} Client not started.${RESET}"
-            fi
+            case "$2" in
+                -a | -admin)
+                    log hltd Client
+                    gitn
+                    echo
+                    echo -n -e "${BLUE} Start the Client? (yes/no):${RESET}\c"
+                    read start_client
+                    if [ "$start_client" = "yes" ] || [ "$start_client" = "y" ]; then
+                        echo -e "${BLUE} Starting the client...${RESET}"
+                        npm start
+                    else
+                        echo -e "${YELLOWBG} Client not started.${RESET}"
+                    fi
+                    ;;
+                -c| -customer)
+                    log hltd ClientC
+                    gitn
+                    code .
+                    echo
+                    echo -n -e "${BLUE} Start the Client? (yes/no):${RESET}\c"
+                    read start_client
+                    if [ "$start_client" = "yes" ] || [ "$start_client" = "y" ] || [ "$start_client" = "YES" ] || [ "$start_client" = "Y" ]; then
+                        echo -e "${BLUE} Starting the client...${RESET}"
+                        npm run dev
+                    else
+                        echo -e "${YELLOWBG} Client not started.${RESET}"
+                    fi
+                    ;;
+                *)
+                log hltd Repositories
+                cd ~/howick/hcs
+                echo
+                echo -n -e "${BLUE} Select a folder: ${RESET}\c"
+                read repo_name
+
+                if [ -z "$repo_name" ]; then
+                    break
+                else
+                    echo -e "${YELLOWBG} Launching ${repo_name} 🚀${RESET}"
+                    tput cuu1
+                    echo -e "${YELLOWBG} Launching ${repo_name}  🚀${RESET}"
+                    tput cuu1
+                    echo -e "${YELLOWBG} Launching ${repo_name}   🚀${RESET}"
+                    cd $repo_name
+                    gitn
+                    ls
+                    code .
+
+                fi
+                ;;
+            esac
+
+
+            # if [ -z "$2" ]; then
+            #     echo "log hltd client"
+            #     echo
+            #     echo "Usage:"
+            #     echo "  Logging formatted for howick portal "
+            #     return 1
+            # fi
+            # log hltd Client
+            # gitn
+            # echo
+            # echo -n -e "${BLUE} Start the Client? (yes/no):${RESET}\c"
+            # read start_client
+            # if [ "$start_client" = "yes" ] || [ "$start_client" = "y" ]; then
+            #     echo -e "${BLUE} Starting the client...${RESET}"
+            #     npm start
+            # else
+            #     echo -e "${YELLOWBG} Client not started.${RESET}"
+            # fi
             ;;
         server)
             log hp Server
