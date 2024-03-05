@@ -451,7 +451,7 @@ iod() {
             ;;
          sc|scan)
                 case "$2" in
-                    -e|exercise)
+                    -e|-exercise)
                         module_number="m$3"
                         exercise_number="e$4"
                         _status="$5"
@@ -488,7 +488,7 @@ iod() {
                 esac
                 ;;
         *)
-            read_doc $doc "NR<=32"
+            read_doc $doc "NR<=40"
             ;;
     esac
 }
