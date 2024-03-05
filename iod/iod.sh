@@ -476,7 +476,7 @@ iod() {
                         log . "IOD CLI in VS Code" "Module Scan --print"
                         # python3 per_row_m_pdf.py <module_number>
                         python3 per_row_m_pdf.py $module_number
-                        cd pdf
+                        cd ~/iod/progress/pdf/missing
                         open "${module_number}_report.pdf"
 
                         echo -e "${REDBG} SCANNED and OPENING THE LIST ${RESET}"
