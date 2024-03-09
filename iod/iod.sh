@@ -349,7 +349,7 @@ iod() {
 
                     iods labs "$student_name" "$module_number" "$repo_url" "$@"
                     ;;
-            -r|report)
+                -r|report)
                     case "$3" in
                         "")
                             read_doc $doc "NR=23"
@@ -389,9 +389,48 @@ iod() {
 
                                     python3 builder_sh.py $student_name
                                     ;;
+                                --e|-email)
+                                    case "$5" in
+                                        -u| -udpate)
+                                            # [ -z "$6" ] && echo -e "${RED} Please provide the username ${RESET}" && return 1
+                                            cd ~/iod/progress
+                                            log . "IOD CLI in VS Code" "$student_name Report Card"
 
+                                            echo -n  "\n"
+                                            echo -n -e " ${ORANGE} Preparing to mail the updated Report Card to $student_name ${RESET} "
+                                            echo -n  "\n"
+
+                                            echo -n -e " ${ORANGE} Ready ✔︎ ${RESET} "
+                                            echo -n  "\n"
+
+                                            python3 smpt-students_per.py $student_name -u
+
+                                            echo -n  "\n"
+                                            echo -n -e " ${NEONGREEN} Mailing Completed ✔︎ ${RESET} "
+                                            echo -n "\n"
+                                            ;;
+                                        *)
+                                            cd ~/iod/progress
+                                            log . "IOD CLI in VS Code" "$student_name Report Card"
+
+                                            echo -n  "\n"
+                                            echo -n -e " ${ORANGE} Preparing to mail the Report Card to $student_name ${RESET} "
+                                            echo -n  "\n"
+
+                                            echo -n -e " ${ORANGE} Ready ✔︎ ${RESET} "
+                                            echo -n  "\n"
+
+                                            python3 smpt-students_per.py $student_name
+
+                                            echo -n  "\n"
+                                            echo -n -e " ${NEONGREEN} Mailing Completed ✔︎ ${RESET} "
+                                            echo -n "\n"
+                                            echo -n "\n"
+                                            ;;
+                                    esac
+                                    ;;
                                 *)
-                                    read_doc $doc "NR>=25 && NR<=27"
+                                    read_doc $doc "NR>=26 && NR<=30"
                                     ;;
                             esac
                             ;;
@@ -509,7 +548,7 @@ iod() {
                 esac
                 ;;
         *)
-            read_doc $doc "NR<=40"
+            read_doc $doc "NR<=43"
             ;;
     esac
 }
