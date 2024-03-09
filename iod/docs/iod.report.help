@@ -1,0 +1,12 @@
+
+
+iods report Command
+
+Usage:
+
+    iod report [ --print | --open | --all | --email ]
+
+iod report --print          Print All Students Report card and Navigate to folder destination
+iod report --open           Navigate to folder destination of Student Report Card (pdfs)
+iod report --all            Convert the progress markdon to csv, Open CSV in VS Code
+iod report --email          Send Progress Report Cards to all Students email
