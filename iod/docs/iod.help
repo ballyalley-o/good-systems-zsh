@@ -9,6 +9,7 @@ iod show                                          Navigates to iod folder and op
 iod report --print                                Print All Students Report card and Navigate to folder destination
 iod report --open                                 Navigate to folder destination of Student Report Card (pdfs)
 iod report --all                                  Convert the progress markdon to csv, Open CSV in VS Code
+iod report --email                                Send Progress Report Cards to all Students email
 iod go -c                                         Navigates to labs capstone folder in iod and open VS Code
 iod go <module_number>                            Navigates to specific labs module folder in iod and open VS Code
 iod go <module_number> --clone <git_repo>         Navigates to specific labs module folder, clone the repo and open VS Code
