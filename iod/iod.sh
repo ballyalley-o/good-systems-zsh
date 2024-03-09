@@ -26,6 +26,7 @@ iod_students=$HOME/mac-zshrc/iod/docs/iod.students.help
 iod_students_list=$HOME/mac-zshrc/iod/docs/iod.students.list.help
 iod_students_go=$HOME/mac-zshrc/iod/docs/iod.students.go.help
 iod_scan=$HOME/mac-zshrc/iod/docs/iod.scan.help
+iod_report=$HOME/mac-zshrc/iod/docs/iod.report.help
 iods=$HOME/mac-zshrc/iod/docs/iods.help
 iods_go=$HOME/mac-zshrc/iod/docs/iods_go.help
 
@@ -388,6 +389,7 @@ iod() {
 
                                     python3 builder_sh.py $student_name
                                     ;;
+
                                 *)
                                     read_doc $doc "NR>=25 && NR<=27"
                                     ;;
@@ -444,8 +446,27 @@ iod() {
                     python3 builder_all.py
                     code students/progress-all.csv
                     ;;
+                --e|--email)
+                    cd ~/iod/progress
+                    log . "IOD CLI in VS Code" "Report Card"
+
+                    echo -n  "\n"
+                    echo -n -e " ${ORANGE} Preparing to mail Report Cards to Students ${RESET} "
+                    echo -n  "\n"
+
+                    echo -n -e " ${ORANGE} Ready ✔︎ ${RESET} "
+                    echo -n  "\n"
+
+                    python3 smpt-students.py
+
+                    echo -n  "\n"
+                    echo -n -e " ${NEONGREEN} Mailing Completed ✔︎ ${RESET} "
+                    echo -n "\n"
+
+                    cd -
+                    ;;
                 *)
-                    read_doc $doc "NR>=9 && NR<=11"
+                    read_doc $iod_report
                     ;;
             esac
             ;;
