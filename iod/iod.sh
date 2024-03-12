@@ -435,7 +435,7 @@ iod() {
                                             echo -n -e " ${ORANGE} Ready ✔︎ ${RESET} "
                                             echo -n  "\n"
 
-                                            echo -e "${GREEN} Are you sure you want to email $student_name's Progress Card to  ❓ ${RESET} "
+                                            echo -e "${GREEN} Are you sure you want to email $student_name's Progress Card ❓ ${RESET} "
                                             read confirm
 
                                             if [ "$confirm" != "yes" ] && [ "$confirm" != "y" ] && [ "$confirm" != "YES" ] && [ "$confirm" != "Y" ]; then
