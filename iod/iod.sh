@@ -450,7 +450,6 @@ iod() {
                                             echo -e "${NEONGREEN} EMAILING... 📧  ${RESET}"
                                             tput cuu1
 
-
                                             python3 smpt-students_per.py $student_name
 
                                             echo -n  "\n"
@@ -526,6 +525,21 @@ iod() {
 
                     echo -n -e " ${ORANGE} Ready ✔︎ ${RESET} "
                     echo -n  "\n"
+
+                    echo -e "${GREEN} Are you sure you want to email ALL the Students Progress Cards ❓ ${RESET} "
+                    read confirm
+
+                    if [ "$confirm" != "yes" ] && [ "$confirm" != "y" ] && [ "$confirm" != "YES" ] && [ "$confirm" != "Y" ]; then
+                        echo -e "${RED} Cancelled. Exiting... ${RESET}"
+                        return 1
+                    fi
+
+                    echo -e "${NEONGREEN} CONFIRMED  ${RESET}"
+                    tput cuu1
+                    echo -e "${NEONGREEN} ...  ${RESET}"
+                    tput cuu1
+                    echo -e "${NEONGREEN} EMAILING... 📧  ${RESET}"
+                    tput cuu1
 
                     python3 smpt-students.py
 
