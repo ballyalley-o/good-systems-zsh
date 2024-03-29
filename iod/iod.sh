@@ -469,11 +469,32 @@ iod() {
             -g|grade)
                 case "$3" in
                     "")
-                         read_doc $doc "NR>=28 && NR<=29"
+                         read_doc $doc "NR>=31 && NR<=34"
                         ;;
                     *)
                         student_name=$(echo "$3" | tr '[:lower:]' '[:upper:]')
                         module_number="$4"
+
+                        if [ "$4" = "mini" ]; then
+
+                            if [ "$5" -gt 3 ] || [ "$5" -eq 0 ]; then
+                                echo -n -e "${RED} Mini-Project Not found ${RESET}"
+                                return 1
+                            fi
+
+                            echo -n -e "${INVERTED} $student_name 〉 Mini-Project $5:  ${RESET} "
+                            echo -e "\n"
+
+                            cd ~/iod/progress/csv
+                            log . "IOD CLI in VS Code" "Grading Sheet"
+                            # ./grade.sh bob m9 e5 x
+                            ./grade.sh $student_name $module_number $5 x
+
+                            echo -n -e "${NEONGREEN} CSV MODIFIED ✔︎  ${RESET} "
+                            echo -e "\n"
+                            return 0
+                        fi
+
                         exercise_number="e$5"
                         status_exercise="$6"
 
@@ -593,7 +614,7 @@ iod() {
                 esac
                 ;;
         *)
-            read_doc $doc "NR<=43"
+            read_doc $doc "NR<=46"
             ;;
     esac
 }
