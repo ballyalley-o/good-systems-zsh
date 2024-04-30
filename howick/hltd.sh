@@ -9,7 +9,7 @@ htld_doc=$HOME/mac-zshrc/howick/hltd.help
 hltd() {
     case "$1" in
 	    this)
-	    howick && cd ~/howick/hcs/hp_dev-new
+	    howick && cd ~/howick/hcs/howick-admin-portal
 	    ;;
         repo)
             log hltd Repositories

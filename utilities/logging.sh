@@ -101,7 +101,7 @@ log() {
             if [ "$dir" = Client ]; then
                 color="$BLUE"
                 colorbg="$BLUEBG"
-                repo_dir=hp_dev-new
+                repo_dir=howick-admin-portal
             fi
 
             if [ "$dir" = ClientC ]; then
