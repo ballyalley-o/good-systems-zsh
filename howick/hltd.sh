@@ -7,6 +7,8 @@ source ~/win-bashrc/mac-zshrc/utilities/read-doc.sh -h
 # command documentation
 htld_doc=$HOME/win-bashrc/mac-zshrc/howick/hltd.help
 
+USER_NAME=$(whoami)
+
 hltd() {
     case "$1" in
 	    this)
@@ -74,6 +76,9 @@ hltd() {
                 logis)
                 gen5 logis
                 ;;
+                rondo)
+                gen5 rondo
+                ;;
                 repos)
                     case "$2" in
                                 -1)
@@ -97,6 +102,33 @@ hltd() {
                     ;;
                 esac
                 ;;
+
+        support)
+            case "$2" in
+                .)
+                cd "$HOME/Howick/Support" && start .
+
+                echo -e "${GREEN} 🚀 Howick Support started ${RESET}"
+                ;;
+
+                -bcs)
+                cd "$HOME/Howick/Support/Software/bcs" && start .
+
+                echo -e "${GREEN} 🚀 BCS Installation Tools started ${RESET}"
+                ;;
+
+                -csv)
+                cd "$HOME/Howick/Support/CSV_collection" && start .
+
+                echo -e "${GREEN} 🚀 CSV Collection started ${RESET}"
+                ;;
+
+                *)
+                echo "Usage: hltd support [ . | -bcs | -csv]"
+                return 1
+                ;;
+            esac
+            ;;
         *)
         read_doc $htld_doc
         ;;
