@@ -3,7 +3,7 @@ hltd Command
 
 Usage:
 
-    hltd [ this | client | server | gen5 [ main | logis ] | sync [ -c | -s | -i ]  ]
+    hltd [ this | client | server | gen5 [ main | logis | support ] | sync [ -c | -s | -i ]  ]
 
 hltd this               Navigate to the howick portal UI local
 hltd client             Navigate to the howick portal UI local and open VS Code (optional: start client)
@@ -18,3 +18,6 @@ hltd gen5 soft          Navigate to the hlcv3 soft releases folder
 hltd sync -c            Navigate to the howick sync machine repository and Open VS Code
 hltd sync -s            Navigate to the howick sync machine repository and Show the folder
 hltd sync -i            Navigate to the howick sync machine repository and Show the mock ini
+hltd support .          Navigate to the howick Suport folder and Show the folder contents
+hltd support -bcs       Navigate to the howick Software BCS tools and Show all the tools in the folder
+hltd support -csv       Navigate to the howick Software CSV collections and Show all the CSVs for testing
