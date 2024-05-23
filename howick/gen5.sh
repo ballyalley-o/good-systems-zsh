@@ -6,12 +6,12 @@ ini_file=Howick.ini
 ini_abs_path=$HOME/AppData/Roaming/HowickHLCv3/Howick.ini
 
 gen5() {
-     case "$1" in
-	 main)
+	case "$1" in
+	main)
 		case "$2" in
 
 	       	.)
-		 		cd ~/Documents/HOWICK-repos/hmi-gen-5-official/HLCv3 && code .
+		 		cd ~/repos/howicks/current/hmi-gen-5-official/HLCv3 && code .
 				;;
 			-i)
 				cd $ini_path && start $ini_file && cat $ini_file | awk "NR==3"
@@ -26,13 +26,16 @@ gen5() {
 				;;
             esac
 	     ;;
-	 logis)
-	    cd ~/Documents/HOWICK-repos/finish_profiles/HLCv3 && code  .
+	logis)
+	    cd ~/repos/howick/current/finish_profiles/HLCv3 && code  .
 	    ;;
+	rondo)
+		cd ~/repos/howick/current/hmi-gen-5-RIB/HLCv3 && code .
+		;;
 	config)
 		cd $ini_path && start .
 		;;
-	 repos)
+	repos)
 	    case "$2" in
 	       -1)
 		 		cd ~/Documents/HOWICK-repos
