@@ -96,6 +96,10 @@ hltd() {
                 soft)
                     cd "~/Documents/Support/Software/HowickHLCv3-SoftRelease"
                     ;;
+
+                license)
+                    start "https://howick.sharepoint.com/:w:/s/SoftwareDevelopmentTeam/EVLmusoWGxxJgZbTmk3FgicB45GtJ86k6r9U3knIltqHNg?e=HsxSFq"
+                    ;;
                 *)
                     echo "Usage: hltd gen5 [ main | profile | logis | repos | soft ] [-1 | -2]"
                     return 1
