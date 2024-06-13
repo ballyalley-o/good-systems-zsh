@@ -15,6 +15,8 @@ hltd gen5 ini           Navigate to the HowickHLCv3 & Open the machine configura
 hltd gen5 logis         Navigate to the howick gen5 logis local and open VS Code
 hltd gen5 repo          Navigate to the howick local repo folder and show the folder
 hltd gen5 soft          Navigate to the hlcv3 soft releases folder
+hltd gen5 license       Opens the browser, navigate to the Sharepoint software development to open the official Licensing Documentation
+hltd gen5 doc-ini       Navigate to the N drive Documentations folder and opens the Official Documentation of Ini
 hltd sync -c            Navigate to the howick sync machine repository and Open VS Code
 hltd sync -s            Navigate to the howick sync machine repository and Show the folder
 hltd sync -i            Navigate to the howick sync machine repository and Show the mock ini
