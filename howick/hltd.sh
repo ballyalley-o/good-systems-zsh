@@ -100,6 +100,10 @@ hltd() {
                 license)
                     start "https://howick.sharepoint.com/:w:/s/SoftwareDevelopmentTeam/EVLmusoWGxxJgZbTmk3FgicB45GtJ86k6r9U3knIltqHNg?e=HsxSFq"
                     ;;
+
+                ini-doc)
+                    start "N:\Documentation\Howick Ini file configuration V4 - Shortcut.lnk"
+                    ;;
                 *)
                     echo "Usage: hltd gen5 [ main | profile | logis | repos | soft ] [-1 | -2]"
                     return 1
