@@ -3,7 +3,7 @@ hltd Command
 
 Usage:
 
-    hltd [ this | client | server | gen5 [ main | logis | support ] | sync [ -c | -s | -i ]  ]
+    hltd [ this | client | server | gen5 [ main | logis | support | license | doc-ini | mb | faults ] | sync [ -c | -s | -i ]  ]
 
 hltd this               Navigate to the howick portal UI local
 hltd client             Navigate to the howick portal UI local and open VS Code (optional: start client)
@@ -17,6 +17,8 @@ hltd gen5 repo          Navigate to the howick local repo folder and show the fo
 hltd gen5 soft          Navigate to the hlcv3 soft releases folder
 hltd gen5 license       Opens the browser, navigate to the Sharepoint software development to open the official Licensing Documentation
 hltd gen5 doc-ini       Navigate to the N drive Documentations folder and opens the Official Documentation of Ini
+hltd gen5 mb            Navigate to Howick Sharepoint Modbus Address Mapping excel worksheet
+hltd gen5 faults        Navigate to Howick Sharepoint PLC Faults Table (Program Structure Report)
 hltd sync -c            Navigate to the howick sync machine repository and Open VS Code
 hltd sync -s            Navigate to the howick sync machine repository and Show the folder
 hltd sync -i            Navigate to the howick sync machine repository and Show the mock ini

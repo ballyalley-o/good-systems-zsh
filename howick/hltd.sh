@@ -4,6 +4,7 @@ source ~/win-bashrc/mac-zshrc/utilities/functions.sh
 source ~/win-bashrc/mac-zshrc/howick/gen5.sh
 source ~/win-bashrc/mac-zshrc/utilities/read-doc.sh -h
 
+
 # command documentation
 htld_doc=$HOME/win-bashrc/mac-zshrc/howick/hltd.help
 
@@ -98,14 +99,27 @@ hltd() {
                     ;;
 
                 license)
+                    echo -e "${BLUE} Loading Howick HMI Licensing Documentation, Please wait... .${RESET}"
                     start "https://howick.sharepoint.com/:w:/s/SoftwareDevelopmentTeam/EVLmusoWGxxJgZbTmk3FgicB45GtJ86k6r9U3knIltqHNg?e=HsxSFq"
                     ;;
 
                 ini-doc)
-                    start "N:\Documentation\Howick Ini file configuration V4 - Shortcut.lnk"
+                    echo -e "${DARKGRAY} Loading Howick Ini Configuration Documentation V8 (2023), Please wait... .${RESET}"
+                    start "https://howick.sharepoint.com/:w:/s/SoftwareDevelopmentTeam/ERxj06ocIilEvJXCWKBPnXkBzPLpzhQaJgzTnmYYjxLt6Q?e=FifTl1"
+
+                    # copy the file path to clipboard
+                    echo "N:\Electrical and Control System\Archive Files and Programs\Technicians Manuals and Onsite Files\Howick Ini file configuration V8.docx" | clip
+                    ;;
+                mb)
+                    echo -e "${NEONGREEN} Loading Howick HMI Modbus Addr Mapping Spreadsheet, Please wait... .${RESET}"
+                    start "https://howick.sharepoint.com/:x:/s/SoftwareDevelopmentTeam/ESSgCfaf5nBLrYtoXMmKIzEBSCcjsgOwRzfyATV_d7XPQQ?e=8IuvKl"
+                    ;;
+                faults)
+                    echo -e "${BLUE} Loading Fault Table, Please wait... .${RESET}"
+                    start "https://howick.sharepoint.com/:w:/s/SoftwareDevelopmentTeam/EStYmIgPyPZCs_cwAufZmD4BrbP1FMHZSMxuSl32ToDgPQ?e=4WOahi&nav=eyJoIjoiMTgzNDkxOTY1NyJ9"
                     ;;
                 *)
-                    echo "Usage: hltd gen5 [ main | profile | logis | repos | soft ] [-1 | -2]"
+                    echo "Usage: hltd gen5 [ main | profile | logis | repos  [-1 | -2] | soft | license | mb | faults ]"
                     return 1
                     ;;
                 esac
