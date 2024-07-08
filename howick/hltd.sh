@@ -131,6 +131,14 @@ hltd() {
             cd ~/howick/branding
             open Howick-Brand_Guidelines_2020.pdf
             ;;
+        hmi)
+            log . "Howick HLCv3" "Generation 5"
+
+            echo
+
+            cd ~/howick/hmi/gen5/hlc
+            code .
+            ;;
         *)
         read_doc $htld_doc
         ;;
