@@ -3,7 +3,7 @@ hltd Command
 
 Usage:
 
-    hltd [ this | repo | client [ -customer | -admin ]  | server ]
+    hltd [ this | repo | client [ -customer | -admin ]  | server | logo | branding | hmi ]
 
 hltd this       Navigate to the howick portal UI local
 hltd repo       Navigate to the howick portal local repos && open VS Code (optional: select folder)
@@ -13,3 +13,4 @@ hltd client -a  Navigate to the howick admin portal UI repository, and open VS C
 hltd server     Navigate to the howick portal SERVER local and open VS Code (optional: start server)
 hltd logo       Navigate to the howick branding and open up the Logos folder
 hltd branding   Navigate to the howick branding and open up the Brand Guidlines pdf
+hltd hmi        Navigate to the howick HLCv3 Generation 5 repository and open vs code
