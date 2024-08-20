@@ -113,7 +113,7 @@ log() {
             if [ "$dir" = Server ]; then
                 color="$ORANGE"
                 colorbg="$ORANGEBG"
-                repo_dir=hp_server
+                repo_dir=howick-server
             fi
 
             loading_bar 0.01 ${color} Navigating:
