@@ -106,14 +106,40 @@ hltd() {
             log hp Server
             gitn
             echo
-            echo -n -e "${ORANGE} Start the Server? (yes/no):${RESET}\c"
-            read start_server
+            echo -n -e "${ORANGE} Start the Server? (yes/no): ${RESET} \n"
+            echo -n -e "${BLUE} ➜ ${RESET}\c"
+            counter=30
+            trap 'kill $bg_pid 2>/dev/null; exit' SIGINT
+            (
+                while [ $counter -gt 0 ]; do
+                    echo -e "${DARKGRAY} Starting server in $counter seconds... ${RESET}"
+                    sleep 1
+                    counter=$((counter-1))
+                done
+                echo -e "${ORANGE} No response received. Starting the server...${RESET}"
+                echo -e "${YELLOWBG} Server not started.${RESET}"
+            ) &
+
+            bg_pid=$!
+
+            read -t $((counter+1)) start_server
+
             if [ "$start_server" = "yes" ] || [ "$start_server" = "y" ]; then
+                kill $bg_pid 2>/dev/null
                 echo -e "${ORANGE} Starting the server...${RESET}"
                 npm start
+            elif [ -z "$start_server" ]; then
+                wait $bg_pid
             else
+                kill $bg_pid 2>/dev/null
                 echo -e "${YELLOWBG} Server not started.${RESET}"
             fi
+            # if [ "$start_server" = "yes" ] || [ "$start_server" = "y" ]; then
+            #     echo -e "${ORANGE} Starting the server...${RESET}"
+            #     npm start
+            # else
+            #     echo -e "${YELLOWBG} Server not started.${RESET}"
+            # fi
             ;;
         logo)
             log . "Howick Branding" Logos
