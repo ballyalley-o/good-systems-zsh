@@ -14,3 +14,7 @@ hltd server     Navigate to the howick portal SERVER local and open VS Code (opt
 hltd logo       Navigate to the howick branding and open up the Logos folder
 hltd branding   Navigate to the howick branding and open up the Brand Guidlines pdf
 hltd hmi        Navigate to the howick HLCv3 Generation 5 repository and open vs code
+hltd ssh -c     SSH to howick portal server [customer]
+hltd ssh -d     SSH to howick portal server [dev]
+hltd ssh -a     SSH to howick portal server [admin]
+hltd ssh -s     SSH to howick portal server [server]
