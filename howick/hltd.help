@@ -18,3 +18,4 @@ hltd ssh -c     SSH to howick portal server [customer]
 hltd ssh -d     SSH to howick portal server [dev]
 hltd ssh -a     SSH to howick portal server [admin]
 hltd ssh -s     SSH to howick portal server [server]
+hltd vpn        VPN Key to clipboard
