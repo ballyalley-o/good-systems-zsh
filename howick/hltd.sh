@@ -25,7 +25,7 @@ hltd() {
                 -d | -dev)
                     echo " ${DARKGRAY} ⎸ ${RESET}"
                     echo " ${DARKGRAY} ⎸ ${RESET}"
-                    myip=$VPN_IP_DEV_SERVER
+                    myip=$SSH_IP_DEV_SERVER
                     echo " ${DARKGRAY} ⎸ ${RESET}"
                     echo " ${DARKGRAY} ├ Logging into: ${RESET} ${INVERTED} $myip ${RESET}"
                     tput cuu1
@@ -35,7 +35,7 @@ hltd() {
                 -a | -admin)
                     echo " ${DARKGRAY} ⎸ ${RESET}"
                     echo " ${DARKGRAY} ⎸ ${RESET}"
-                    myip=$VPN_IP_ADMIN_PORTAL_SERVER
+                    myip=$SSH_IP_ADMIN_PORTAL_SERVER
                     echo " ${DARKGRAY} ⎸ ${RESET}"
                     echo " ${DARKGRAY} ├ Logging into: ${RESET} ${INVERTED} $myip ${RESET}..."
                     tput cuu1
@@ -46,7 +46,7 @@ hltd() {
                 -c | -customer)
                     echo " ${DARKGRAY} ⎸ ${RESET}"
                     echo " ${DARKGRAY} ⎸ ${RESET}"
-                    myip=$VPN_IP_CUSTOMER_PORTAL_SERVER
+                    myip=$SSH_IP_CUSTOMER_PORTAL_SERVER
                     echo " ${DARKGRAY} ⎸ ${RESET}"
                     echo " ${DARKGRAY} ├ Logging into: ${RESET} ${INVERTED} $myip ${RESET}..."
                     tput cuu1
@@ -57,7 +57,7 @@ hltd() {
                 -s | -server)
                     echo " ${DARKGRAY} ⎸ ${RESET}"
                     echo " ${DARKGRAY} ⎸ ${RESET}"
-                    myip=$VPN_IP_SERVER
+                    myip=$SSH_IP_SERVER
                     echo " ${DARKGRAY} ⎸ ${RESET}"
                     echo " ${DARKGRAY} ├ Logging into: ${RESET} ${INVERTED} $myip ${RESET}..."
                     tput cuu1
@@ -75,6 +75,14 @@ hltd() {
             echo " ${DARKGRAY} ⎸ ${RESET}"
             echo " ${DARKGRAY}⎿ Tunnel closed 🔻 ${RESET}"
             echo " "
+            ;;
+        vpn)
+            if [ -f .env ]; then
+                export $(grep -v '^#' .env | xargs)
+            fi
+            myVpnKey=$VPN_PASSWORD
+            echo -n "$myVpnKey" | pbcopy
+            echo -e "${DARKGRAY} Copied the VPN password to the clipboard...${RESET}"
             ;;
         repo)
             log hltd Repositories
