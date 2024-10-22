@@ -9,8 +9,73 @@ htld_doc=$HOME/mac-zshrc/howick/hltd.help
 hltd() {
     case "$1" in
 	    this)
-	    howick && cd ~/howick/hcs/howick-admin-portal
-	    ;;
+            howick && cd ~/howick/hcs/howick-admin-portal
+            ;;
+        ssh)
+            echo -e "${DARKGRAY} Connecting to the Howick Server Hub ...${RESET}"
+            tput cuu1
+            echo " "
+            echo -e "${BLUEBG} Howick Server Hub ${RESET}"
+            echo " ${DARKGRAY} ⎸ ${RESET}"
+            if [ -f .env ]; then
+                export $(grep -v '^#' .env | xargs)
+            fi
+
+            case "$2" in
+                -d | -dev)
+                    echo " ${DARKGRAY} ⎸ ${RESET}"
+                    echo " ${DARKGRAY} ⎸ ${RESET}"
+                    myip=$VPN_IP_DEV_SERVER
+                    echo " ${DARKGRAY} ⎸ ${RESET}"
+                    echo " ${DARKGRAY} ├ Logging into: ${RESET} ${INVERTED} $myip ${RESET}"
+                    tput cuu1
+                    echo " ${DARKGRAY} ├ Logged into: ${RESET} ${NEONGREEN} $myip ${RESET}"
+                    ssh bally@$myip
+                    ;;
+                -a | -admin)
+                    echo " ${DARKGRAY} ⎸ ${RESET}"
+                    echo " ${DARKGRAY} ⎸ ${RESET}"
+                    myip=$VPN_IP_ADMIN_PORTAL_SERVER
+                    echo " ${DARKGRAY} ⎸ ${RESET}"
+                    echo " ${DARKGRAY} ├ Logging into: ${RESET} ${INVERTED} $myip ${RESET}..."
+                    tput cuu1
+                    echo " ${DARKGRAY} ├ Logged into: ${RESET} ${YELLOW} $myip ${RESET}"
+                    echo " "
+                    ssh bally@$myip
+                    ;;
+                -c | -customer)
+                    echo " ${DARKGRAY} ⎸ ${RESET}"
+                    echo " ${DARKGRAY} ⎸ ${RESET}"
+                    myip=$VPN_IP_CUSTOMER_PORTAL_SERVER
+                    echo " ${DARKGRAY} ⎸ ${RESET}"
+                    echo " ${DARKGRAY} ├ Logging into: ${RESET} ${INVERTED} $myip ${RESET}..."
+                    tput cuu1
+                    echo " ${DARKGRAY} ├ Logged into: ${RESET} ${BLUE} $myip ${RESET}"
+                    echo " "
+                    ssh bally@$myip
+                    ;;
+                -s | -server)
+                    echo " ${DARKGRAY} ⎸ ${RESET}"
+                    echo " ${DARKGRAY} ⎸ ${RESET}"
+                    myip=$VPN_IP_SERVER
+                    echo " ${DARKGRAY} ⎸ ${RESET}"
+                    echo " ${DARKGRAY} ├ Logging into: ${RESET} ${INVERTED} $myip ${RESET}..."
+                    tput cuu1
+                    echo " ${DARKGRAY} ├ Logged into: ${RESET} ${ORANGE} $myip ${RESET}"
+                    echo " "
+                    ssh bally@$myip
+                    ;;
+                *)
+                echo " ${INVERTED} 📄 hltd ssh [ -a | -c | -s | -d ] Documentation ${RESET}"
+                echo " "
+                read_doc $htld_doc "NR>=17 && NR<=20"
+                ;;
+            esac
+            echo " ${DARKGRAY} ⎸ ${RESET}"
+            echo " ${DARKGRAY} ⎸ ${RESET}"
+            echo " ${DARKGRAY}⎿ Tunnel closed 🔻 ${RESET}"
+            echo " "
+            ;;
         repo)
             log hltd Repositories
             gitn
@@ -166,6 +231,9 @@ hltd() {
             code .
             ;;
         *)
+        echo " "
+        echo " ${INVERTED} 📄 hltd Documentation ${RESET}"
+        echo " "
         read_doc $htld_doc
         ;;
     esac
