@@ -78,7 +78,7 @@ hltd() {
             ;;
         vpn)
             if [ -f .env ]; then
-                export $(grep -v '^#' .env | xargs)
+                export $(grep -v '^#' .env | grep -v '^$' | xargs)
             fi
             myVpnKey=$VPN_PASSWORD
             echo -n "$myVpnKey" | pbcopy
